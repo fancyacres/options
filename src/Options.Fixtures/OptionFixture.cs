@@ -1,3 +1,5 @@
+using System.Linq;
+
 using NUnit.Framework;
 
 namespace Options.Fixtures
@@ -5,11 +7,24 @@ namespace Options.Fixtures
 	[TestFixture]
 	public class OptionFixture
 	{
+		public static string ReturnsNull()
+		{
+			return null;
+		}
+
 		[Test]
 		[Category("Fast")]
 		public void AvoidNullReturnsNoneForNull()
 		{
 			var actual = Option.AvoidNull((string)null);
+			actual.AssertNone();
+		}
+
+		[Test]
+		[Category("Fast")]
+		public void AvoidNullReturnsNoneForNullNullable()
+		{
+			var actual = Option.AvoidNull((int?)null);
 			actual.AssertNone();
 		}
 
@@ -24,25 +39,10 @@ namespace Options.Fixtures
 
 		[Test]
 		[Category("Fast")]
-		public void AvoidNullReturnsNoneForNullNullable()
-		{
-			var actual = Option.AvoidNull((int?)null);
-			actual.AssertNone();
-		}
-
-		[Test]
-		[Category("Fast")]
 		public void AvoidNullReturnsSomeForNonNullNullable([Random(1)] double random)
 		{
 			var actual = Option.AvoidNull((double?)random);
 			actual.AssertSomeAnd(Is.EqualTo(random));
-		}
-
-		[Test]
-		[Category("Fast")]
-		public void NoneReturnsNone()
-		{
-			Option.None<int>().AssertNone();
 		}
 
 		[Test]
@@ -53,9 +53,11 @@ namespace Options.Fixtures
 			guarded().AssertNone();
 		}
 
-		public static string ReturnsNull()
+		[Test]
+		[Category("Fast")]
+		public void NoneReturnsNone()
 		{
-			return null;
+			Option.None<int>().AssertNone();
 		}
 	}
 }

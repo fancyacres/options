@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 
 using NUnit.Framework;
 
@@ -7,58 +8,6 @@ namespace Options.Fixtures
 	[TestFixture]
 	public class OptionExtensionsFixture
 	{
-		[Test]
-		[Category("Fast")]
-		public void TransformToleratesNull()
-		{
-			var actual = new Option<int>().Transform<int, string>(null);
-			actual.AssertNone();
-		}
-
-		[Test]
-		[Category("Fast")]
-		public void TransformTransformsSome()
-		{
-			var actual = new Option<int>(1).Transform(v => v == 1);
-			actual.AssertSomeAnd(Is.True);
-		}
-
-		[Test]
-		[Category("Fast")]
-		public void TransformTransformsNone()
-		{
-			var actual = new Option<int>().Transform(v => v == 1);
-			actual.AssertNone();
-			Assert.That(actual, Is.TypeOf<Option<bool>>());
-		}
-
-		[Test]
-		[Category("Fast")]
-		public void TransformReturnsNoneIfFuncReturnsNull()
-		{
-			var actual = new Option<int>(1).Transform(i => (string)null);
-			actual.AssertNone();
-		}
-
-		[Test]
-		[Category("Fast")]
-		public void GetValueOrDefaultReturnsValueIfSome([Random(int.MinValue, -1, 1)] int value, [Random(0, int.MaxValue, 1)] int defaultValue)
-		{
-			var option = new Option<int>(value);
-			var actual = option.GetValueOrDefault(defaultValue);
-			Assert.That(actual, Is.EqualTo(value));
-		}
-
-		[Test]
-		[Category("Fast")]
-		public void GetValueOrDefaultReturnsDefaultIfNone([Random(0, int.MaxValue, 1)] int defaultValue)
-		{
-			var option = new Option<int>();
-			option.AssertNone();
-			var actual = option.GetValueOrDefault(defaultValue);
-			Assert.That(actual, Is.EqualTo(defaultValue));
-		}
-
 		[Test]
 		[Category("Fast")]
 		public void AsNullableReturnsNullForNone()
@@ -98,6 +47,54 @@ namespace Options.Fixtures
 
 		[Test]
 		[Category("Fast")]
+		public void CoalesceReturnsFirstSome()
+		{
+			var options = new[]
+			              {
+			              	new Option<int>(),
+			              	new Option<int>(1),
+			              };
+
+			var actual = options.Coalese();
+			actual.AssertSomeAnd(Is.EqualTo(1));
+		}
+
+		[Test]
+		[Category("Fast")]
+		public void CoalesceReturnsNoneIfAllNone()
+		{
+			var options = new[]
+			              {
+			              	new Option<int>(),
+			              	new Option<int>(),
+			              };
+
+			var actual = options.Coalese();
+			actual.AssertNone();
+		}
+
+		[Test]
+		[Category("Fast")]
+		public void GetValueOrDefaultReturnsDefaultIfNone([Random(0, int.MaxValue, 1)] int defaultValue)
+		{
+			var option = new Option<int>();
+			option.AssertNone();
+			var actual = option.GetValueOrDefault(defaultValue);
+			Assert.That(actual, Is.EqualTo(defaultValue));
+		}
+
+		[Test]
+		[Category("Fast")]
+		public void GetValueOrDefaultReturnsValueIfSome([Random(int.MinValue, -1, 1)] int value,
+		                                                [Random(0, int.MaxValue, 1)] int defaultValue)
+		{
+			var option = new Option<int>(value);
+			var actual = option.GetValueOrDefault(defaultValue);
+			Assert.That(actual, Is.EqualTo(value));
+		}
+
+		[Test]
+		[Category("Fast")]
 		public void GetValueOrThrowThrowsException()
 		{
 			var option = new Option<int>();
@@ -111,7 +108,7 @@ namespace Options.Fixtures
 		{
 			var option = new Option<int>();
 			Assert.That(() => { option.GetValueOrThrow(); },
-						Throws.TypeOf<NoneException>());
+			            Throws.TypeOf<NoneException>());
 		}
 
 		[Test]
@@ -134,34 +131,6 @@ namespace Options.Fixtures
 
 		[Test]
 		[Category("Fast")]
-		public void CoalesceReturnsFirstSome()
-		{
-			var options = new[]
-			              {
-			              	new Option<int>(),
-							new Option<int>(1),
-			              };
-
-			var actual = options.Coalese();
-			actual.AssertSomeAnd(Is.EqualTo(1));
-		}
-
-		[Test]
-		[Category("Fast")]
-		public void CoalesceReturnsNoneIfAllNone()
-		{
-			var options = new[]
-			              {
-			              	new Option<int>(),
-							new Option<int>(),
-			              };
-
-			var actual = options.Coalese();
-			actual.AssertNone();
-		}
-
-		[Test]
-		[Category("Fast")]
 		public void LiftReturnsNoneIfNone()
 		{
 			var actual = new Option<int>().Lift(i => new Option<int>(i));
@@ -174,6 +143,39 @@ namespace Options.Fixtures
 		{
 			var actual = new Option<int>(1).Lift(i => new Option<string>(i.ToString()));
 			actual.AssertSomeAnd(Is.EqualTo(1.ToString()));
+		}
+
+		[Test]
+		[Category("Fast")]
+		public void TransformReturnsNoneIfFuncReturnsNull()
+		{
+			var actual = new Option<int>(1).Transform(i => (string)null);
+			actual.AssertNone();
+		}
+
+		[Test]
+		[Category("Fast")]
+		public void TransformToleratesNull()
+		{
+			var actual = new Option<int>().Transform<int, string>(null);
+			actual.AssertNone();
+		}
+
+		[Test]
+		[Category("Fast")]
+		public void TransformTransformsNone()
+		{
+			var actual = new Option<int>().Transform(v => v == 1);
+			actual.AssertNone();
+			Assert.That(actual, Is.TypeOf<Option<bool>>());
+		}
+
+		[Test]
+		[Category("Fast")]
+		public void TransformTransformsSome()
+		{
+			var actual = new Option<int>(1).Transform(v => v == 1);
+			actual.AssertSomeAnd(Is.True);
 		}
 	}
 }

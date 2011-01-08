@@ -4,20 +4,20 @@ using System.Linq;
 namespace Options
 {
 	/// <summary>
-	/// A handy alternative to null.
+	/// 	A handy alternative to null.
 	/// </summary>
-	/// <typeparam name="TOption">The type of the value contained by an <see cref="Option{TOption}"/></typeparam>
+	/// <typeparam name = "TOption">The type of the value contained by an <see cref = "Option{TOption}" /></typeparam>
 	public struct Option<TOption> : IEquatable<Option<TOption>>
 	{
 		private readonly bool _isSome;
 		private readonly TOption _value;
 
 		/// <summary>
-		/// Initializes an <see cref="Option{TOption}"/> instance with a value.
+		/// 	Initializes an <see cref = "Option{TOption}" /> instance with a value.
 		/// </summary>
-		/// <param name="value">The internal value of the <see cref="Option{TOption}"/></param>
+		/// <param name = "value">The internal value of the <see cref = "Option{TOption}" /></param>
 		/// <remarks>
-		/// If <paramref name="value"/> is null, the <see cref="Option{TOption}"/> will not contain a value.
+		/// 	If <paramref name = "value" /> is null, the <see cref = "Option{TOption}" /> will not contain a value.
 		/// </remarks>
 		public Option(TOption value)
 		{
@@ -26,14 +26,14 @@ namespace Options
 		}
 
 		/// <summary>
-		/// Executes the functions, varying whether a value is contained in the <see cref="Option{TOption}"/>.
+		/// 	Executes the functions, varying whether a value is contained in the <see cref = "Option{TOption}" />.
 		/// </summary>
-		/// <typeparam name="TResult">The type returned by <paramref name="ifSome"/> and <paramref name="ifNone"/></typeparam>
-		/// <param name="ifSome">The function to execute if a value is present</param>
-		/// <param name="ifNone">The function to execute if no value is present</param>
-		/// <returns>The value returned by <paramref name="ifSome"/> or <paramref name="ifNone"/></returns>
-		/// <exception cref="ArgumentNullException"><paramref name="ifSome"/> is null</exception>
-		/// <exception cref="ArgumentNullException"><paramref name="ifNone"/> is null</exception>
+		/// <typeparam name = "TResult">The type returned by <paramref name = "ifSome" /> and <paramref name = "ifNone" /></typeparam>
+		/// <param name = "ifSome">The function to execute if a value is present</param>
+		/// <param name = "ifNone">The function to execute if no value is present</param>
+		/// <returns>The value returned by <paramref name = "ifSome" /> or <paramref name = "ifNone" /></returns>
+		/// <exception cref = "ArgumentNullException"><paramref name = "ifSome" /> is null</exception>
+		/// <exception cref = "ArgumentNullException"><paramref name = "ifNone" /> is null</exception>
 		public TResult Handle<TResult>(Func<TOption, TResult> ifSome, Func<TResult> ifNone)
 		{
 			if (ifSome == null)
@@ -48,12 +48,13 @@ namespace Options
 		}
 
 		/// <summary>
-		/// Indicates whether this instance and a specified object are equal.
+		/// 	Indicates whether this instance and a specified object are equal.
 		/// </summary>
 		/// <returns>
-		/// true if <paramref name="obj"/> and this instance are the same type and represent the same value; otherwise, false.
+		/// 	true if <paramref name = "obj" /> and this instance are the same type and represent the same value; otherwise, false.
 		/// </returns>
-		/// <param name="obj">Another object to compare to. </param><filterpriority>2</filterpriority>
+		/// <param name = "obj">Another object to compare to. </param>
+		/// <filterpriority>2</filterpriority>
 		public override bool Equals(object obj)
 		{
 			if (ReferenceEquals(null, obj))
@@ -68,10 +69,10 @@ namespace Options
 		}
 
 		/// <summary>
-		/// Returns the hash code for this instance.
+		/// 	Returns the hash code for this instance.
 		/// </summary>
 		/// <returns>
-		/// A 32-bit signed integer that is the hash code for this instance.
+		/// 	A 32-bit signed integer that is the hash code for this instance.
 		/// </returns>
 		/// <filterpriority>2</filterpriority>
 		public override int GetHashCode()
@@ -83,10 +84,10 @@ namespace Options
 		}
 
 		/// <summary>
-		/// Operator to test <see cref="Option{TOption}"/> equality
+		/// 	Operator to test <see cref = "Option{TOption}" /> equality
 		/// </summary>
-		/// <param name="left">The <see cref="Option{TOption}"/> on the left side of the operator</param>
-		/// <param name="right">The <see cref="Option{TOption}"/> on the right side of the operator</param>
+		/// <param name = "left">The <see cref = "Option{TOption}" /> on the left side of the operator</param>
+		/// <param name = "right">The <see cref = "Option{TOption}" /> on the right side of the operator</param>
 		/// <returns>True, if the instances are equal; false, if not.</returns>
 		public static bool operator ==(Option<TOption> left, Option<TOption> right)
 		{
@@ -94,10 +95,10 @@ namespace Options
 		}
 
 		/// <summary>
-		/// Operator to test <see cref="Option{TOption}"/> equality
+		/// 	Operator to test <see cref = "Option{TOption}" /> equality
 		/// </summary>
-		/// <param name="left">The <see cref="Option{TOption}"/> on the left side of the operator</param>
-		/// <param name="right">The <see cref="Option{TOption}"/> on the right side of the operator</param>
+		/// <param name = "left">The <see cref = "Option{TOption}" /> on the left side of the operator</param>
+		/// <param name = "right">The <see cref = "Option{TOption}" /> on the right side of the operator</param>
 		/// <returns>False, if the instances are equal; true, if not.</returns>
 		public static bool operator !=(Option<TOption> left, Option<TOption> right)
 		{
@@ -107,16 +108,16 @@ namespace Options
 		#region IEquatable<Option<TOption>> Members
 
 		/// <summary>
-		/// Indicates whether the current object is equal to another object of the same type.
+		/// 	Indicates whether the current object is equal to another object of the same type.
 		/// </summary>
 		/// <returns>
-		/// true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.
+		/// 	true if the current object is equal to the <paramref name = "other" /> parameter; otherwise, false.
 		/// </returns>
-		/// <param name="other">An <see cref="Option{TOption}"/> to compare with this object.</param>
+		/// <param name = "other">An <see cref = "Option{TOption}" /> to compare with this object.</param>
 		public bool Equals(Option<TOption> other)
 		{
 			return !(_isSome || other._isSome)
-				|| other._isSome.Equals(_isSome) && Equals(other._value, _value);
+			       || other._isSome.Equals(_isSome) && Equals(other._value, _value);
 		}
 
 		#endregion
