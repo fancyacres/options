@@ -35,6 +35,9 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <DocumentationFile>bin\Release\Options.XML</DocumentationFile>
   </PropertyGroup>
+  <PropertyGroup>
+    <KeyContainerName>Options</KeyContainerName>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
