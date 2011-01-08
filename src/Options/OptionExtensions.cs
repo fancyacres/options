@@ -64,5 +64,14 @@ namespace Options
 			}
 			return options.FirstOrDefault(o => o.Transform(v => true).GetValueOrDefault(false));
 		}
+
+		public static Option<TResult> Lift<TOption, TResult>(this Option<TOption> option, Func<TOption, Option<TResult>> selector)
+		{
+			if (selector == null)
+			{
+				throw new ArgumentNullException("selector");
+			}
+			return option.Transform(selector).GetValueOrDefault(new Option<TResult>());
+		}
 	}
 }

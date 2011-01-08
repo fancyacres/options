@@ -159,5 +159,21 @@ namespace Options.Fixtures
 			var actual = options.Coalese();
 			actual.AssertNone();
 		}
+
+		[Test]
+		[Category("Fast")]
+		public void LiftReturnsNoneIfNone()
+		{
+			var actual = new Option<int>().Lift(i => new Option<int>(i));
+			actual.AssertNone();
+		}
+
+		[Test]
+		[Category("Fast")]
+		public void LiftReturnsSelectedOption()
+		{
+			var actual = new Option<int>(1).Lift(i => new Option<string>(i.ToString()));
+			actual.AssertSomeAnd(Is.EqualTo(1.ToString()));
+		}
 	}
 }
