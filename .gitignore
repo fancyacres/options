@@ -1,2 +1,5 @@
 **/_ReSharper.*/
 **/*.suo
+**/*.ReSharper.user
+src/**/obj/
+src/**/bin/
