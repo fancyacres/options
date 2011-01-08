@@ -3,3 +3,4 @@
 **/*.ReSharper.user
 src/**/obj/
 src/**/bin/
+nuget-package/

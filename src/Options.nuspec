@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?> 
+<package> 
+  <metadata> 
+    <id>Options</id> 
+    <version>0.1</version> 
+    <authors>David Sidlinger</authors>
+    <description>A handy alternative to null</description> 
+    <language>en-US</language>
+    <licenseUrl>http://www.opensource.org/licenses/bsd-license</licenseUrl>
+    <projectUrl>http://github.com/davidsidlinger/options</projectUrl>
+  </metadata> 
+</package>
