@@ -9,10 +9,10 @@ namespace Options.Fixtures
 	{
 		[Test]
 		[Category("Fast")]
-		public void TransformHatesNull()
+		public void TransformToleratesNull()
 		{
-			Assert.That(() => { new Option<int>().Transform<int, string>(null); },
-						Throws.TypeOf<ArgumentNullException>().With.Property("ParamName").EqualTo("func"));
+			var actual = new Option<int>().Transform<int, string>(null);
+			actual.AssertNone();
 		}
 
 		[Test]
