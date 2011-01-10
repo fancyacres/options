@@ -1,5 +1,7 @@
 using System.Linq;
 
+using Microsoft.FSharp.Core;
+
 using NUnit.Framework;
 
 namespace Options.Fixtures
@@ -7,7 +9,7 @@ namespace Options.Fixtures
 	[TestFixture]
 	public class OptionFixture
 	{
-		public static string ReturnsNull()
+		private static string ReturnsNull()
 		{
 			return null;
 		}
@@ -58,6 +60,19 @@ namespace Options.Fixtures
 		public void NoneReturnsNone()
 		{
 			Option.None<int>().AssertNone();
+		}
+
+		[Test]
+		[Category("Fast")]
+		public void FSharpConversion([Random(1)] double random)
+		{
+			var fSharpSome = FSharpOption<double>.Some(random);
+			var ourSome = Option.FromFSharp(fSharpSome);
+			ourSome.AssertSomeAnd(Is.EqualTo(random));
+
+			var fSharpNone = FSharpOption<double>.None;
+			var ourNone = Option.FromFSharp(fSharpNone);
+			ourNone.AssertNone();
 		}
 	}
 }

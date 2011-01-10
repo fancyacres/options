@@ -1,6 +1,8 @@
 using System;
 using System.Linq;
 
+using Microsoft.FSharp.Core;
+
 using NUnit.Framework;
 
 namespace Options.Fixtures
@@ -176,6 +178,20 @@ namespace Options.Fixtures
 		{
 			var actual = new Option<int>(1).Transform(v => v == 1);
 			actual.AssertSomeAnd(Is.True);
+		}
+
+		[Test]
+		[Category("Fast")]
+		public void FSharpConversion([Random(int.MinValue, int.MaxValue, 1)] int random)
+		{
+			var ourSome = new Option<int>(random);
+			var fSharpSome = ourSome.ToFSharp();
+			Assert.That(FSharpOption<int>.get_IsSome(fSharpSome), "F# option should be some");
+			Assert.That(fSharpSome.Value, Is.EqualTo(random));
+
+			var ourNone = Option.None<int>();
+			var fSharpNone = ourNone.ToFSharp();
+			Assert.That(FSharpOption<int>.get_IsNone(fSharpNone), "F# option should be None");
 		}
 	}
 }

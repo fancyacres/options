@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
+using Microsoft.FSharp.Core;
+
 namespace Options
 {
 	///<summary>
@@ -156,6 +158,17 @@ namespace Options
 			return selector == null
 			       	? Option.None<TResult>()
 			       	: option.Transform(selector).GetValueOrDefault(Option.None<TResult>());
+		}
+
+		///<summary>
+		/// Converts an <see cref="Option{TOption}"/> to an equivalent <see cref="FSharpOption{T}"/>
+		///</summary>
+		///<param name="option">The <see cref="Option{TOption}"/> to convert</param>
+		///<typeparam name = "TOption">The internal type of <paramref name = "option" /></typeparam>
+		///<returns>An <see cref="FSharpOption{T}"/> equivalent to <paramref name="option"/></returns>
+		public static FSharpOption<TOption> ToFSharp<TOption>(this Option<TOption> option)
+		{
+			return option.Handle(FSharpOption<TOption>.Some, () => FSharpOption<TOption>.None);
 		}
 	}
 }

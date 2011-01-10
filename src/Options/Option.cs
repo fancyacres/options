@@ -1,6 +1,8 @@
 using System;
 using System.Linq;
 
+using Microsoft.FSharp.Core;
+
 namespace Options
 {
 	/// <summary>
@@ -58,6 +60,21 @@ namespace Options
 			return guarded == null
 			       	? (Func<Option<TOption>>)(() => new Option<TOption>())
 			       	: (() => new Option<TOption>(guarded()));
+		}
+
+		///<summary>
+		/// Converts an <see cref="FSharpOption{T}"/> to an equivalent <see cref="Option{TOption}"/>.
+		///</summary>
+		///<param name="fSharpOption">The <see cref="FSharpOption{T}"/> to convert</param>
+		///<typeparam name="TOption">The internal value of <paramref name="fSharpOption"/></typeparam>
+		///<returns>An <see cref="Option{TOption}"/> equivalent to <paramref name="fSharpOption"/></returns>
+		public static Option<TOption> FromFSharp<TOption>(FSharpOption<TOption> fSharpOption)
+		{
+			if (fSharpOption == null || FSharpOption<TOption>.get_IsNone(fSharpOption))
+			{
+				return None<TOption>();
+			}
+			return new Option<TOption>(fSharpOption.Value);
 		}
 	}
 }
