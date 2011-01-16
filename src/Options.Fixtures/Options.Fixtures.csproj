@@ -50,6 +50,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\Options\CommonAssemblyInfo.cs">
+      <Link>CommonAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="EnumerableExtensionsFixture.cs" />
+    <Compile Include="ObjectExtensionsFixture.cs" />
     <Compile Include="OptionExtensionsFixture.cs" />
     <Compile Include="OptionFixture.cs" />
     <Compile Include="OptionTOptionFixture.cs" />

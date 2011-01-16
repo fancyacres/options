@@ -49,7 +49,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CommonAssemblyInfo.cs" />
+    <Compile Include="EnumerableExtensions.cs" />
     <Compile Include="NoneException.cs" />
+    <Compile Include="ObjectExtensions.cs" />
     <Compile Include="Option.cs" />
     <Compile Include="OptionExtensions.cs" />
     <Compile Include="Option[TOption].cs" />
