@@ -1,6 +1,4 @@
 using System;
-using System.Linq;
-
 using Microsoft.FSharp.Core;
 
 namespace Options
@@ -11,13 +9,12 @@ namespace Options
 	public static class Option
 	{
 		/// <summary>
-		/// 	Creates an <see cref = "Option{TOption}" /> from a reference type.
+		/// 	Creates an <see cref = "Option{TOption}" />.
 		/// </summary>
 		/// <typeparam name = "TOption">The type of the <see cref = "Option{TOption}" />'s internal value</typeparam>
 		/// <param name = "value">The <typeparamref name = "TOption" /> which will be represented by the created <see cref = "Option{TOption}" /></param>
 		/// <returns>An <see cref = "Option{TOption}" /> of <typeparamref name = "TOption" /> type. Will be None, if <paramref name = "value" /> is null.</returns>
 		public static Option<TOption> Create<TOption>(TOption value)
-			where TOption : class
 		{
 			return new Option<TOption>(value);
 		}
