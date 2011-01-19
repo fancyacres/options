@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 
 using Microsoft.FSharp.Core;
@@ -74,5 +75,40 @@ namespace Options.Fixtures
 			var ourNone = Option.FromFSharp(fSharpNone);
 			ourNone.AssertNone();
 		}
+
+		[Test]
+		[Category("Fast")]
+		public void ReferenceTypeSomeReturnsOptionWithValueIfGivenNonNullValue()
+		{
+			var value = new object();
+			var actual = Option.Some(value);
+			actual.AssertSomeAnd(Is.SameAs(value));
+		}
+
+		[Test]
+		[Category("Fast")]
+		public void ReferenceTypeSomeThrowsArgumentNullExceptionIfGivenNull()
+		{
+			object value = null;
+			Assert.Throws<ArgumentNullException>(() => { Option.Some(value); });
+		}
+
+		[Test]
+		[Category("Fast")]
+		public void NullableValueTypeSomeReturnsOptionWithValueIfGivenNonNullValue()
+		{
+			int? value = 1;
+			var actual = Option.Some(value);
+			actual.AssertSomeAnd(Is.EqualTo(value));
+		}
+
+		[Test]
+		[Category("Fast")]
+		public void NullableValueTypeSomeThrowsArgumentNullExceptionIfGivenNull()
+		{
+			int? value = null;
+			Assert.Throws<ArgumentNullException>(() => { Option.Some(value); });
+		}
+
 	}
 }

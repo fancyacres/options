@@ -76,5 +76,39 @@ namespace Options
 			}
 			return new Option<TOption>(fSharpOption.Value);
 		}
+
+		/// <summary>
+		/// 	Creates an <see cref = "Option{TOption}" /> from a reference type, given a non-null value.
+		/// </summary>
+		/// <typeparam name = "TOption">The type of the <see cref = "Option{TOption}" />'s internal value</typeparam>
+		/// <param name = "value">The <typeparamref name = "TOption" /> which will be represented by the created <see cref = "Option{TOption}" /></param>
+		/// <exception cref="System.ArgumentNullException">Thrown when <paramref name="value"/> is null.</exception>
+		/// <returns>An <see cref = "Option{TOption}" /> of <typeparamref name = "TOption" /> type, containing <paramref name="value"/>.</returns>
+		public static Option<TOption> Some<TOption>(TOption? value)
+			where TOption : struct
+		{
+			if (value == null)
+			{
+				throw new ArgumentNullException("value");
+			}
+			return new Option<TOption>(value.Value);
+		}
+
+		/// <summary>
+		/// 	Creates an <see cref = "Option{TOption}" /> from a reference type, given a non-null value.
+		/// </summary>
+		/// <typeparam name = "TOption">The type of the <see cref = "Option{TOption}" />'s internal value</typeparam>
+		/// <param name = "value">The <typeparamref name = "TOption" /> which will be represented by the created <see cref = "Option{TOption}" /></param>
+		/// <exception cref="System.ArgumentNullException">Thrown when <paramref name="value"/> is null.</exception>
+		/// <returns>An <see cref = "Option{TOption}" /> of <typeparamref name = "TOption" /> type, containing <paramref name="value"/>.</returns>
+		public static Option<TOption> Some<TOption>(TOption value)
+			where TOption : class
+		{
+			if (value == null)
+			{
+				throw new ArgumentNullException("value");
+			}
+			return new Option<TOption>(value);
+		}
 	}
 }
