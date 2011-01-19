@@ -170,5 +170,30 @@ namespace Options
 		{
 			return option.Handle(FSharpOption<TOption>.Some, () => FSharpOption<TOption>.None);
 		}
+
+		/// <summary>
+		/// 	Executes the functions, varying whether a value is contained in the <see cref = "Option{TOption}" />.
+		/// </summary>
+		/// <typeparam name="T1">The type of the first item in the <see cref="Tuple"/> contained by <paramref name="option"/></typeparam>
+		/// <typeparam name="T2">The type of the second item in the <see cref="Tuple"/> contained by <paramref name="option"/></typeparam>
+		/// <typeparam name = "TResult">The type returned by <paramref name = "ifSome" /> and <paramref name = "ifNone" /></typeparam>
+		/// <param name="option">The <see cref="Option{TOption}"/> to be handled</param>
+		/// <param name = "ifSome">The function to execute if a value is present</param>
+		/// <param name = "ifNone">The function to execute if no value is present</param>
+		/// <returns>The value returned by <paramref name = "ifSome" /> or <paramref name = "ifNone" /></returns>
+		/// <exception cref = "ArgumentNullException"><paramref name = "ifSome" /> is null</exception>
+		/// <exception cref = "ArgumentNullException"><paramref name = "ifNone" /> is null</exception>
+		public static TResult Handle<T1, T2, TResult>(this Option<Tuple<T1, T2>> option, Func<T1, T2, TResult> ifSome, Func<TResult> ifNone)
+		{
+			if (ifSome == null)
+			{
+				throw new ArgumentNullException("ifSome");
+			}
+			if (ifNone == null)
+			{
+				throw new ArgumentNullException("ifNone");
+			}
+			return option.Handle(tuple => ifSome(tuple.Item1, tuple.Item2), ifNone);
+		}
 	}
 }

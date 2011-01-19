@@ -193,5 +193,15 @@ namespace Options.Fixtures
 			var fSharpNone = ourNone.ToFSharp();
 			Assert.That(FSharpOption<int>.get_IsNone(fSharpNone), "F# option should be None");
 		}
+
+		[Test]
+		[Category("Fast")]
+		public void SpecialHandleForTupleOptions()
+		{
+			var tupleOption = 1.AsOption().Intersect("Willis".AsOption());
+			tupleOption.AssertSomeAnd(Has.Property("Item1").EqualTo(1).And.Property("Item2").EqualTo("Willis"));
+			var actual = tupleOption.Handle((i, s) => s + i, () => "Huh?");
+			Assert.That(actual, Is.EqualTo("Willis1"));
+		}
 	}
 }
