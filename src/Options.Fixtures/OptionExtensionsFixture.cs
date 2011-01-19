@@ -189,7 +189,7 @@ namespace Options.Fixtures
 			Assert.That(FSharpOption<int>.get_IsSome(fSharpSome), "F# option should be some");
 			Assert.That(fSharpSome.Value, Is.EqualTo(random));
 
-			var ourNone = Option.None<int>();
+			var ourNone = Option.Create<int>();
 			var fSharpNone = ourNone.ToFSharp();
 			Assert.That(FSharpOption<int>.get_IsNone(fSharpNone), "F# option should be None");
 		}

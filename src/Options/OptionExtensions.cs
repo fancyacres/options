@@ -27,7 +27,7 @@ namespace Options
 		///</remarks>
 		public static Option<TResult> Transform<TOption, TResult>(this Option<TOption> option, Func<TOption, TResult> func)
 		{
-			var funcOption = Option.AvoidNull(func);
+			var funcOption = Option.Create(func);
 
 			return funcOption.Handle(f => option.Handle(v => new Option<TResult>(f(v)),
 			                                            () => new Option<TResult>()),
@@ -140,7 +140,7 @@ namespace Options
 		public static Option<TOption> Coalese<TOption>(this IEnumerable<Option<TOption>> options)
 		{
 			return options == null
-			       	? Option.None<TOption>()
+			       	? Option.Create<TOption>()
 			       	: options.FirstOrDefault(o => o.Transform(v => true).GetValueOrDefault(false));
 		}
 
@@ -156,8 +156,8 @@ namespace Options
 		                                                     Func<TOption, Option<TResult>> selector)
 		{
 			return selector == null
-			       	? Option.None<TResult>()
-			       	: option.Transform(selector).GetValueOrDefault(Option.None<TResult>());
+			       	? Option.Create<TResult>()
+			       	: option.Transform(selector).GetValueOrDefault(Option.Create<TResult>());
 		}
 
 		///<summary>

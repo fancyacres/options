@@ -16,7 +16,7 @@ namespace Options
 		/// <typeparam name = "TOption">The type of the <see cref = "Option{TOption}" />'s internal value</typeparam>
 		/// <param name = "value">The <typeparamref name = "TOption" /> which will be represented by the created <see cref = "Option{TOption}" /></param>
 		/// <returns>An <see cref = "Option{TOption}" /> of <typeparamref name = "TOption" /> type. Will be None, if <paramref name = "value" /> is null.</returns>
-		public static Option<TOption> AvoidNull<TOption>(TOption value)
+		public static Option<TOption> Create<TOption>(TOption value)
 			where TOption : class
 		{
 			return new Option<TOption>(value);
@@ -28,7 +28,7 @@ namespace Options
 		/// <typeparam name = "TOption">The type of the <see cref = "Option{TOption}" />'s internal value</typeparam>
 		/// <param name = "value">The <typeparamref name = "TOption" /> which will be represented by the created <see cref = "Option{TOption}" /></param>
 		/// <returns>An <see cref = "Option{TOption}" /> of <typeparamref name = "TOption" /> type. Will be None, if <paramref name = "value" /> is null.</returns>
-		public static Option<TOption> AvoidNull<TOption>(TOption? value)
+		public static Option<TOption> Create<TOption>(TOption? value)
 			where TOption : struct
 		{
 			return value.HasValue
@@ -41,7 +41,7 @@ namespace Options
 		/// </summary>
 		/// <typeparam name = "TOption">The internal type of the <see cref = "Option{TOption}" /></typeparam>
 		/// <returns>An <see cref = "Option{TOption}" /> of <typeparamref name = "TOption" /> type with no value.</returns>
-		public static Option<TOption> None<TOption>()
+		public static Option<TOption> Create<TOption>()
 		{
 			return new Option<TOption>();
 		}
@@ -72,7 +72,7 @@ namespace Options
 		{
 			if (fSharpOption == null || FSharpOption<TOption>.get_IsNone(fSharpOption))
 			{
-				return None<TOption>();
+				return Create<TOption>();
 			}
 			return new Option<TOption>(fSharpOption.Value);
 		}
