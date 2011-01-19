@@ -57,7 +57,7 @@ namespace Options.Fixtures
 			              	new Option<int>(1),
 			              };
 
-			var actual = options.Coalese();
+			var actual = options.Coalesce();
 			actual.AssertSomeAnd(Is.EqualTo(1));
 		}
 
@@ -71,7 +71,7 @@ namespace Options.Fixtures
 			              	new Option<int>(),
 			              };
 
-			var actual = options.Coalese();
+			var actual = options.Coalesce();
 			actual.AssertNone();
 		}
 

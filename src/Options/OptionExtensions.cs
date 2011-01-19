@@ -137,7 +137,7 @@ namespace Options
 		///<param name = "options">An enumerable of <see cref = "Option{TOption}" /></param>
 		///<typeparam name = "TOption">The internal type of the <see cref = "Option{TOption}" />s</typeparam>
 		///<returns>The first non-empty <see cref = "Option{TOption}" /> yielded, or an empty <see cref = "Option{TOption}" /></returns>
-		public static Option<TOption> Coalese<TOption>(this IEnumerable<Option<TOption>> options)
+		public static Option<TOption> Coalesce<TOption>(this IEnumerable<Option<TOption>> options)
 		{
 			return options == null
 			       	? Option.Create<TOption>()
