@@ -193,5 +193,70 @@ namespace Options.Fixtures
 			var fSharpNone = ourNone.ToFSharp();
 			Assert.That(FSharpOption<int>.get_IsNone(fSharpNone), "F# option should be None");
 		}
+
+		public void ActOneArgumentCallsIfSomeWithValueIfOptionHasValue()
+		{
+			var expected = 5;
+			var target = Option.Create(expected);
+			target.Act(actual => Assert.That(actual, Is.EqualTo(expected)));
+		}
+
+		public void ActOneArgumentDoesNotCallIfSomeWithValueIfOptionHasNoValue()
+		{
+			var target = Option.Create<int>();
+			target.Act(actual => Assert.Fail("ifSome called. value: " + actual));
+		}
+
+		public void ActTwoArgumentsCallsIfSomeWithValueIfOptionHasValue()
+		{
+			var expected = 5;
+			var target = Option.Create(expected);
+			target.Act(actual => Assert.That(actual, Is.EqualTo(expected)), () => {});
+		}
+
+		public void ActTwoArgumentsDoesNotCallIfNoneIfOptionHasValue()
+		{
+			var target = Option.Create(5);
+			target.Act(actual => { }, () => Assert.Fail("ifNone called."));
+		}
+
+		public void ActTwoArgumentsCallsIfNoneIfOptionHasNoValue()
+		{
+			var ifNoneCalled = false;
+			var target = Option.Create<int>();
+			target.Act(actual => { }, () => { ifNoneCalled = true; });
+			Assert.That(ifNoneCalled);
+		}
+
+		public void ActTwoArgumentsDoesNotCallIfSomeIfOptionHasNoValue()
+		{
+			var target = Option.Create<int>();
+			target.Act(actual => Assert.Fail("ifSome called. value: " + actual), () => {});
+		}
+
+		public void NoneIfNullOrWhitespaceReturnsNoneIfGivenNull()
+		{
+			string target = null;
+			target.NoneIfNullOrWhiteSpace().AssertNone();
+		}
+
+		public void NoneIfNullOrWhitespaceReturnsNoneIfGivenEmptyString()
+		{
+			var target = "";
+			target.NoneIfNullOrWhiteSpace().AssertNone();
+		}
+
+		public void NoneIfNullOrWhitespaceReturnsNoneIfGivenWhitespace()
+		{
+			var target = " \r\n\t";
+			target.NoneIfNullOrWhiteSpace().AssertNone();
+		}
+
+		public void NoneIfNullOrWhitespaceReturnsValueIfGivenContent()
+		{
+			var target = "a";
+			target.NoneIfNullOrWhiteSpace().AssertSomeAnd(Is.EqualTo("a"));
+		}
+
 	}
 }

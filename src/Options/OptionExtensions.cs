@@ -170,5 +170,57 @@ namespace Options
 		{
 			return option.Handle(FSharpOption<TOption>.Some, () => FSharpOption<TOption>.None);
 		}
+
+		/// <summary>
+		/// Runs one of the given actions based on whether the given <see cref="Option{TOption}"/> has a value.
+		/// </summary>
+		///<typeparam name = "TOption">The internal type of <paramref name = "option" /></typeparam>
+		/// <param name="option">The <see cref="Option{TOption}"/> to act on.</param>
+		/// <param name="ifSome">The action that is run when the option has a value.</param>
+		/// <param name="ifNone">The action that is run when the option has no value.</param>
+		public static void Act<TOption>(this Option<TOption> option, Action<TOption> ifSome, Action ifNone)
+		{
+			if (ifSome == null)
+			{
+				throw new ArgumentNullException("ifSome");
+			}
+			if (ifNone == null)
+			{
+				throw new ArgumentNullException("ifNone");
+			}
+			if (option.IsSome())
+			{
+				ifSome(option.GetValueOrThrow());
+			}
+			else
+			{
+				ifNone();
+			}
+		}
+
+		/// <summary>
+		/// Runs one an action on the value of the given <see cref="Option{TOption}"/>, if it has a value.
+		/// </summary>
+		///<typeparam name = "TOption">The internal type of <paramref name = "option" /></typeparam>
+		/// <param name="option">The <see cref="Option{TOption}"/> to act on.</param>
+		/// <param name="ifSome">The action that is run when the option has a value.</param>
+		public static void Act<TOption>(this Option<TOption> option, Action<TOption> ifSome)
+		{
+			if (ifSome == null)
+			{
+				throw new ArgumentNullException("ifSome");
+			}
+			option.Act(ifSome, () => { });
+		}
+
+		/// <summary>
+		/// Returns an empty <see cref="Option{TOption}"/> if the given <see cref="System.String"/> is null, empty, or only whitespace.
+		/// </summary>
+		/// <param name="value">The given <see cref="System.String"/></param>
+		/// <returns>An empty <see cref="Option{TOption}"/> if the given <see cref="System.String"/> is null, empty, or only whitespace; otherwise an <see cref="Option{TOption}"/> containing the given string.</returns>
+		public static Option<string> NoneIfNullOrWhiteSpace(this string value)
+		{
+			return string.IsNullOrWhiteSpace(value) ? Option.Create<string>() : Option.Create(value);
+		}
 	}
 }
