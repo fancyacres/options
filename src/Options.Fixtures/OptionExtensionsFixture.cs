@@ -135,7 +135,7 @@ namespace Options.Fixtures
 		[Category("Fast")]
 		public void LiftReturnsNoneIfNone()
 		{
-			var actual = new Option<int>().Lift(i => new Option<int>(i));
+			var actual = new Option<int>().SelectMany(i => new Option<int>(i));
 			actual.AssertNone();
 		}
 
@@ -143,7 +143,7 @@ namespace Options.Fixtures
 		[Category("Fast")]
 		public void LiftReturnsSelectedOption()
 		{
-			var actual = new Option<int>(1).Lift(i => new Option<string>(i.ToString()));
+			var actual = new Option<int>(1).SelectMany(i => new Option<string>(i.ToString()));
 			actual.AssertSomeAnd(Is.EqualTo(1.ToString()));
 		}
 
@@ -151,7 +151,7 @@ namespace Options.Fixtures
 		[Category("Fast")]
 		public void TransformReturnsNoneIfFuncReturnsNull()
 		{
-			var actual = new Option<int>(1).Transform(i => (string)null);
+			var actual = new Option<int>(1).Select(i => (string)null);
 			actual.AssertNone();
 		}
 
@@ -159,7 +159,7 @@ namespace Options.Fixtures
 		[Category("Fast")]
 		public void TransformToleratesNull()
 		{
-			var actual = new Option<int>().Transform<int, string>(null);
+			var actual = new Option<int>().Select<int, string>(null);
 			actual.AssertNone();
 		}
 
@@ -167,7 +167,7 @@ namespace Options.Fixtures
 		[Category("Fast")]
 		public void TransformTransformsNone()
 		{
-			var actual = new Option<int>().Transform(v => v == 1);
+			var actual = new Option<int>().Select(v => v == 1);
 			actual.AssertNone();
 			Assert.That(actual, Is.TypeOf<Option<bool>>());
 		}
@@ -176,7 +176,7 @@ namespace Options.Fixtures
 		[Category("Fast")]
 		public void TransformTransformsSome()
 		{
-			var actual = new Option<int>(1).Transform(v => v == 1);
+			var actual = new Option<int>(1).Select(v => v == 1);
 			actual.AssertSomeAnd(Is.True);
 		}
 

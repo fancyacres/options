@@ -25,7 +25,7 @@ namespace Options
 		///<remarks>
 		///	If <paramref name = "func" /> is null, the returned <see cref = "Option{TOption}" /> will never contain a value.
 		///</remarks>
-		public static Option<TResult> Transform<TOption, TResult>(this Option<TOption> option, Func<TOption, TResult> func)
+		public static Option<TResult> Select<TOption, TResult>(this Option<TOption> option, Func<TOption, TResult> func)
 		{
 			var funcOption = Option.Create(func);
 
@@ -87,7 +87,7 @@ namespace Options
 		///<returns>True, if <paramref name = "option" /> contains a value; false, if not.</returns>
 		public static bool IsSome<TOption>(this Option<TOption> option)
 		{
-			return option.Transform(v => true).GetValueOrDefault(false);
+			return option.Select(v => true).GetValueOrDefault(false);
 		}
 
 		///<summary>
@@ -99,7 +99,7 @@ namespace Options
 		public static TOption? AsNullable<TOption>(this Option<TOption> option)
 			where TOption : struct
 		{
-			return option.Transform(v => (TOption?)v).GetValueOrDefault(null);
+			return option.Select(v => (TOption?)v).GetValueOrDefault(null);
 		}
 
 		///<summary>
@@ -127,7 +127,7 @@ namespace Options
 		///</remarks>
 		public static Option<Tuple<T1, T2>> Intersect<T1, T2>(this Option<T1> first, Option<T2> second)
 		{
-			return first.Handle(v => second.Transform(v2 => Tuple.Create(v, v2)),
+			return first.Handle(v => second.Select(v2 => Tuple.Create(v, v2)),
 			                    () => new Option<Tuple<T1, T2>>());
 		}
 
@@ -141,7 +141,7 @@ namespace Options
 		{
 			return options == null
 			       	? Option.Create<TOption>()
-			       	: options.FirstOrDefault(o => o.Transform(v => true).GetValueOrDefault(false));
+			       	: options.FirstOrDefault(o => o.Select(v => true).GetValueOrDefault(false));
 		}
 
 		///<summary>
@@ -152,12 +152,12 @@ namespace Options
 		///<typeparam name = "TOption">The internal type of <paramref name = "option" /></typeparam>
 		///<typeparam name = "TResult">The internal type of the returned <see cref = "Option{TOption}" /></typeparam>
 		///<returns>An <see cref = "Option{TOption}" /> of <typeparamref name = "TResult" /> type</returns>
-		public static Option<TResult> Lift<TOption, TResult>(this Option<TOption> option,
+		public static Option<TResult> SelectMany<TOption, TResult>(this Option<TOption> option,
 		                                                     Func<TOption, Option<TResult>> selector)
 		{
 			return selector == null
 			       	? Option.Create<TResult>()
-			       	: option.Transform(selector).GetValueOrDefault(Option.Create<TResult>());
+			       	: option.Select(selector).GetValueOrDefault(Option.Create<TResult>());
 		}
 
 		///<summary>
