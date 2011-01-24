@@ -12,26 +12,66 @@ namespace Options
 	public static class OptionExtensions
 	{
 		///<summary>
-		///	Transforms an <see cref = "Option{TOption}" /> while retaining the protection it provides.
+		///	Projects the value of an option into a new form.
 		///</summary>
-		///<param name = "option">The <see cref = "Option{TOption}" /> being transformed</param>
-		///<param name = "func">The function used to transform the internal value of <paramref name = "option" /></param>
-		///<typeparam name = "TOption">The internal type of <paramref name = "option" /></typeparam>
-		///<typeparam name = "TResult">The type returned by <paramref name = "func" /></typeparam>
+		///<param name = "source">The optional value to invoke a transform function on.</param>
+		///<param name = "selector">A transform function to apply to the optional value.</param>
+		///<typeparam name = "TSource">The type of the value of <paramref name = "source" />.</typeparam>
+		///<typeparam name = "TResult">The type of the value returned by <paramref name = "selector" /></typeparam>
 		///<returns>
-		///	An <see cref = "Option{TOption}" /> of <typeparamref name = "TResult" /> internal type. It will 
-		///	be constructed with the result of <paramref name = "func" />, if <paramref name = "option" /> contains a value.
+		/// An <see cref = "Option{T}"/> whose value is the result of invoking the transform function on the value of <paramref name = "source"/>.
 		///</returns>
 		///<remarks>
-		///	If <paramref name = "func" /> is null, the returned <see cref = "Option{TOption}" /> will never contain a value.
+		///	If <paramref name = "selector" /> is null, the returned <see cref = "Option{TOption}" /> will never contain a value.
 		///</remarks>
-		public static Option<TResult> Select<TOption, TResult>(this Option<TOption> option, Func<TOption, TResult> func)
+		public static Option<TResult> Select<TSource, TResult>(this Option<TSource> source, Func<TSource, TResult> selector)
 		{
-			var funcOption = Option.Create(func);
+			var funcOption = Option.Create(selector);
 
-			return funcOption.Handle(f => option.Handle(v => new Option<TResult>(f(v)),
+			return funcOption.Handle(f => source.Handle(v => new Option<TResult>(f(v)),
 			                                            () => new Option<TResult>()),
 			                         () => new Option<TResult>());
+		}
+
+		///<summary>
+		///	Projects the value of an option to an <see cref = "Option{T}" />,  and invokes a result selector function on the value therein.
+		///</summary>
+		///<param name = "option">An optional value to project.</param>
+		///<param name = "resultSelector">A transform function to apply to the value of the intermediate option.</param>
+		///<typeparam name = "TSource">The type of the elements of source.</typeparam>
+		///<typeparam name = "TResult">The type of the value of the resulting option.</typeparam>
+		///<returns>An <see cref = "Option{T}" /> whose value is the result of mapping the result value and its corresponding source value to a result value. If the source or intermediate option has no value, return an empty option of type <typeparamref name="TResult"/>.</returns>
+		///<exception cref = "ArgumentNullException"><paramref name="resultSelector"/> is null.</exception>
+		public static Option<TResult> SelectMany<TSource, TResult>(this Option<TSource> option,
+																												 Func<TSource, Option<TResult>> resultSelector)
+		{
+			return resultSelector == null
+							? Option.Create<TResult>()
+							: option.Select(resultSelector).GetValueOrDefault(Option.Create<TResult>());
+		}
+
+		///<summary>
+		///	Projects the value of an option to an <see cref = "Option{T}" />, intersects the source and resulting options, and invokes a result selector function on the value therein.
+		///</summary>
+		///<param name = "option">An optional value to project.</param>
+		///<param name = "optionSelector">A transform function to apply to the value of the input option.</param>
+		///<param name = "resultSelector">A transform function to apply to the value of the intermediate option.</param>
+		///<typeparam name = "TSource">The type of the elements of source.</typeparam>
+		///<typeparam name = "TIntermediate">The type of the intermediate value returned by optionSelector.</typeparam>
+		///<typeparam name = "TResult">The type of the value of the resulting option.</typeparam>
+		///<returns>An <see cref = "Option{T}" /> whose value is the result of invoking the transform function optionSelector on the value of source and then mapping the result value and its corresponding source value to a result value. If the source or intermediate option has no value, return an empty option of type <typeparamref name="TResult"/>.</returns>
+		///<exception cref = "ArgumentNullException"><paramref name="optionSelector"/> or <paramref name="resultSelector"/> is null.</exception>
+		public static Option<TResult> SelectMany<TSource, TIntermediate, TResult>(this Option<TSource> option, Func<TSource, Option<TIntermediate>> optionSelector, Func<TSource, TIntermediate, TResult> resultSelector)
+		{
+			if (optionSelector == null)
+			{
+				throw new ArgumentNullException("optionSelector");
+			}
+			if (resultSelector == null)
+			{
+				throw new ArgumentNullException("resultSelector");
+			}
+			return option.Intersect(option.SelectMany(optionSelector)).Select(pair => resultSelector(pair.Item1, pair.Item2));
 		}
 
 		///<summary>
@@ -145,22 +185,6 @@ namespace Options
 		}
 
 		///<summary>
-		///	&quot;Lifts&quot; one <see cref = "Option{TOption}" /> from another.
-		///</summary>
-		///<param name = "option">The original <see cref = "Option{TOption}" /></param>
-		///<param name = "selector">A function which takes the value of <paramref name = "option" /> and returns another <see cref = "Option{TOption}" /></param>
-		///<typeparam name = "TOption">The internal type of <paramref name = "option" /></typeparam>
-		///<typeparam name = "TResult">The internal type of the returned <see cref = "Option{TOption}" /></typeparam>
-		///<returns>An <see cref = "Option{TOption}" /> of <typeparamref name = "TResult" /> type</returns>
-		public static Option<TResult> SelectMany<TOption, TResult>(this Option<TOption> option,
-		                                                     Func<TOption, Option<TResult>> selector)
-		{
-			return selector == null
-			       	? Option.Create<TResult>()
-			       	: option.Select(selector).GetValueOrDefault(Option.Create<TResult>());
-		}
-
-		///<summary>
 		/// Converts an <see cref="Option{TOption}"/> to an equivalent <see cref="FSharpOption{T}"/>
 		///</summary>
 		///<param name="option">The <see cref="Option{TOption}"/> to convert</param>
@@ -221,21 +245,6 @@ namespace Options
 		public static Option<string> NoneIfNullOrWhiteSpace(this string value)
 		{
 			return string.IsNullOrWhiteSpace(value) ? Option.Create<string>() : Option.Create(value);
-		}
-
-		///<summary>
-		///	&quot;Lifts&quot; one <see cref = "Option{TOption}" /> from another.
-		///</summary>
-		///<param name = "option">The original <see cref = "Option{TOption}" /></param>
-		///<param name="map"></param>
-		///<param name = "selector">A function which takes the value of <paramref name = "option" /> and returns another <see cref = "Option{TOption}" /></param>
-		///<typeparam name = "TOption">The internal type of <paramref name = "option" /></typeparam>
-		///<typeparam name = "TResult">The internal type of the returned <see cref = "Option{TOption}" /></typeparam>
-		///<typeparam name="TIntermediate">The intermediate type.</typeparam>
-		///<returns>An <see cref = "Option{TOption}" /> of <typeparamref name = "TResult" /> type</returns>
-		public static Option<TResult> SelectMany<TOption, TIntermediate, TResult>(this Option<TOption> option, Func<TOption, Option<TIntermediate>> map, Func<TOption, TIntermediate, TResult> selector)
-		{
-			return option.Intersect(option.SelectMany(map)).Select(pair => selector(pair.Item1, pair.Item2));
 		}
 	}
 }

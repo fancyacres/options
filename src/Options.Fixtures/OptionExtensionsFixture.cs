@@ -1,6 +1,4 @@
 using System;
-using System.Linq;
-
 using Microsoft.FSharp.Core;
 
 using NUnit.Framework;
@@ -144,7 +142,7 @@ namespace Options.Fixtures
 		public void LiftReturnsSelectedOption()
 		{
 			var actual = from i in new Option<int>(1)
-			             from s in i.ToString()
+			             from s in Option.Create(i.ToString())
 			             select s;
 			actual.AssertSomeAnd(Is.EqualTo(1.ToString()));
 		}
