@@ -143,7 +143,9 @@ namespace Options.Fixtures
 		[Category("Fast")]
 		public void LiftReturnsSelectedOption()
 		{
-			var actual = new Option<int>(1).SelectMany(i => new Option<string>(i.ToString()));
+			var actual = from i in new Option<int>(1)
+			             from s in i.ToString()
+			             select s;
 			actual.AssertSomeAnd(Is.EqualTo(1.ToString()));
 		}
 
@@ -176,7 +178,8 @@ namespace Options.Fixtures
 		[Category("Fast")]
 		public void TransformTransformsSome()
 		{
-			var actual = new Option<int>(1).Select(v => v == 1);
+			var actual = from v in new Option<int>(1)
+			             select v == 1;
 			actual.AssertSomeAnd(Is.True);
 		}
 

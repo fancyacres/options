@@ -222,5 +222,20 @@ namespace Options
 		{
 			return string.IsNullOrWhiteSpace(value) ? Option.Create<string>() : Option.Create(value);
 		}
+
+		///<summary>
+		///	&quot;Lifts&quot; one <see cref = "Option{TOption}" /> from another.
+		///</summary>
+		///<param name = "option">The original <see cref = "Option{TOption}" /></param>
+		///<param name="map"></param>
+		///<param name = "selector">A function which takes the value of <paramref name = "option" /> and returns another <see cref = "Option{TOption}" /></param>
+		///<typeparam name = "TOption">The internal type of <paramref name = "option" /></typeparam>
+		///<typeparam name = "TResult">The internal type of the returned <see cref = "Option{TOption}" /></typeparam>
+		///<typeparam name="TIntermediate">The intermediate type.</typeparam>
+		///<returns>An <see cref = "Option{TOption}" /> of <typeparamref name = "TResult" /> type</returns>
+		public static Option<TResult> SelectMany<TOption, TIntermediate, TResult>(this Option<TOption> option, Func<TOption, Option<TIntermediate>> map, Func<TOption, TIntermediate, TResult> selector)
+		{
+			return option.Intersect(option.SelectMany(map)).Select(pair => selector(pair.Item1, pair.Item2));
+		}
 	}
 }
