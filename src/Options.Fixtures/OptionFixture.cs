@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 
 using Microsoft.FSharp.Core;
@@ -16,34 +17,34 @@ namespace Options.Fixtures
 
 		[Test]
 		[Category("Fast")]
-		public void AvoidNullReturnsNoneForNull()
+		public void CreateReturnsNoneForNull()
 		{
-			var actual = Option.AvoidNull((string)null);
+			var actual = Option.Create((string)null);
 			actual.AssertNone();
 		}
 
 		[Test]
 		[Category("Fast")]
-		public void AvoidNullReturnsNoneForNullNullable()
+		public void CreateReturnsNoneForNullNullable()
 		{
-			var actual = Option.AvoidNull((int?)null);
+			var actual = Option.Create((int?)null);
 			actual.AssertNone();
 		}
 
 		[Test]
 		[Category("Fast")]
-		public void AvoidNullReturnsSomeForNonNull()
+		public void CreateReturnsSomeForNonNull()
 		{
 			var value = new object();
-			var actual = Option.AvoidNull(value);
+			var actual = Option.Create(value);
 			actual.AssertSomeAnd(Is.SameAs(value));
 		}
 
 		[Test]
 		[Category("Fast")]
-		public void AvoidNullReturnsSomeForNonNullNullable([Random(1)] double random)
+		public void CreateReturnsSomeForNonNullNullable([Random(1)] double random)
 		{
-			var actual = Option.AvoidNull((double?)random);
+			var actual = Option.Create((double?)random);
 			actual.AssertSomeAnd(Is.EqualTo(random));
 		}
 
@@ -59,7 +60,7 @@ namespace Options.Fixtures
 		[Category("Fast")]
 		public void NoneReturnsNone()
 		{
-			Option.None<int>().AssertNone();
+			Option.Create<int>().AssertNone();
 		}
 
 		[Test]
@@ -74,5 +75,40 @@ namespace Options.Fixtures
 			var ourNone = Option.FromFSharp(fSharpNone);
 			ourNone.AssertNone();
 		}
+
+		[Test]
+		[Category("Fast")]
+		public void ReferenceTypeSomeReturnsOptionWithValueIfGivenNonNullValue()
+		{
+			var value = new object();
+			var actual = Option.Some(value);
+			actual.AssertSomeAnd(Is.SameAs(value));
+		}
+
+		[Test]
+		[Category("Fast")]
+		public void ReferenceTypeSomeThrowsArgumentNullExceptionIfGivenNull()
+		{
+			object value = null;
+			Assert.Throws<ArgumentNullException>(() => { Option.Some(value); });
+		}
+
+		[Test]
+		[Category("Fast")]
+		public void NullableValueTypeSomeReturnsOptionWithValueIfGivenNonNullValue()
+		{
+			int? value = 1;
+			var actual = Option.Some(value);
+			actual.AssertSomeAnd(Is.EqualTo(value));
+		}
+
+		[Test]
+		[Category("Fast")]
+		public void NullableValueTypeSomeThrowsArgumentNullExceptionIfGivenNull()
+		{
+			int? value = null;
+			Assert.Throws<ArgumentNullException>(() => { Option.Some(value); });
+		}
+
 	}
 }

@@ -1,6 +1,4 @@
 using System;
-using System.Linq;
-
 using Microsoft.FSharp.Core;
 
 namespace Options
@@ -11,13 +9,12 @@ namespace Options
 	public static class Option
 	{
 		/// <summary>
-		/// 	Creates an <see cref = "Option{TOption}" /> from a reference type.
+		/// 	Creates an <see cref = "Option{TOption}" />.
 		/// </summary>
 		/// <typeparam name = "TOption">The type of the <see cref = "Option{TOption}" />'s internal value</typeparam>
 		/// <param name = "value">The <typeparamref name = "TOption" /> which will be represented by the created <see cref = "Option{TOption}" /></param>
 		/// <returns>An <see cref = "Option{TOption}" /> of <typeparamref name = "TOption" /> type. Will be None, if <paramref name = "value" /> is null.</returns>
-		public static Option<TOption> AvoidNull<TOption>(TOption value)
-			where TOption : class
+		public static Option<TOption> Create<TOption>(TOption value)
 		{
 			return new Option<TOption>(value);
 		}
@@ -28,7 +25,7 @@ namespace Options
 		/// <typeparam name = "TOption">The type of the <see cref = "Option{TOption}" />'s internal value</typeparam>
 		/// <param name = "value">The <typeparamref name = "TOption" /> which will be represented by the created <see cref = "Option{TOption}" /></param>
 		/// <returns>An <see cref = "Option{TOption}" /> of <typeparamref name = "TOption" /> type. Will be None, if <paramref name = "value" /> is null.</returns>
-		public static Option<TOption> AvoidNull<TOption>(TOption? value)
+		public static Option<TOption> Create<TOption>(TOption? value)
 			where TOption : struct
 		{
 			return value.HasValue
@@ -41,7 +38,7 @@ namespace Options
 		/// </summary>
 		/// <typeparam name = "TOption">The internal type of the <see cref = "Option{TOption}" /></typeparam>
 		/// <returns>An <see cref = "Option{TOption}" /> of <typeparamref name = "TOption" /> type with no value.</returns>
-		public static Option<TOption> None<TOption>()
+		public static Option<TOption> Create<TOption>()
 		{
 			return new Option<TOption>();
 		}
@@ -72,9 +69,43 @@ namespace Options
 		{
 			if (fSharpOption == null || FSharpOption<TOption>.get_IsNone(fSharpOption))
 			{
-				return None<TOption>();
+				return Create<TOption>();
 			}
 			return new Option<TOption>(fSharpOption.Value);
+		}
+
+		/// <summary>
+		/// 	Creates an <see cref = "Option{TOption}" /> from a reference type, given a non-null value.
+		/// </summary>
+		/// <typeparam name = "TOption">The type of the <see cref = "Option{TOption}" />'s internal value</typeparam>
+		/// <param name = "value">The <typeparamref name = "TOption" /> which will be represented by the created <see cref = "Option{TOption}" /></param>
+		/// <exception cref="System.ArgumentNullException">Thrown when <paramref name="value"/> is null.</exception>
+		/// <returns>An <see cref = "Option{TOption}" /> of <typeparamref name = "TOption" /> type, containing <paramref name="value"/>.</returns>
+		public static Option<TOption> Some<TOption>(TOption? value)
+			where TOption : struct
+		{
+			if (value == null)
+			{
+				throw new ArgumentNullException("value");
+			}
+			return new Option<TOption>(value.Value);
+		}
+
+		/// <summary>
+		/// 	Creates an <see cref = "Option{TOption}" /> from a reference type, given a non-null value.
+		/// </summary>
+		/// <typeparam name = "TOption">The type of the <see cref = "Option{TOption}" />'s internal value</typeparam>
+		/// <param name = "value">The <typeparamref name = "TOption" /> which will be represented by the created <see cref = "Option{TOption}" /></param>
+		/// <exception cref="System.ArgumentNullException">Thrown when <paramref name="value"/> is null.</exception>
+		/// <returns>An <see cref = "Option{TOption}" /> of <typeparamref name = "TOption" /> type, containing <paramref name="value"/>.</returns>
+		public static Option<TOption> Some<TOption>(TOption value)
+			where TOption : class
+		{
+			if (value == null)
+			{
+				throw new ArgumentNullException("value");
+			}
+			return new Option<TOption>(value);
 		}
 	}
 }

@@ -30,7 +30,7 @@ namespace Options
 			}
 			return source
 				.Select(o => new Option<TOption>(o))
-				.FirstOrDefault(option => option.Transform(o => predicate(o)).GetValueOrDefault(false));
+				.FirstOrDefault(option => option.Select(o => predicate(o)).GetValueOrDefault(false));
 		}
 
 		///<summary>
@@ -70,7 +70,7 @@ namespace Options
 			}
 			return source
 				.Select(o => new Option<TOption>(o))
-				.SingleOrDefault(option => option.Transform(o => predicate(o)).GetValueOrDefault(false));
+				.SingleOrDefault(option => option.Select(o => predicate(o)).GetValueOrDefault(false));
 		}
 
 		///<summary>

@@ -1,6 +1,4 @@
 using System;
-using System.Linq;
-
 using Microsoft.FSharp.Core;
 
 using NUnit.Framework;
@@ -57,7 +55,7 @@ namespace Options.Fixtures
 			              	new Option<int>(1),
 			              };
 
-			var actual = options.Coalese();
+			var actual = options.Coalesce();
 			actual.AssertSomeAnd(Is.EqualTo(1));
 		}
 
@@ -71,7 +69,7 @@ namespace Options.Fixtures
 			              	new Option<int>(),
 			              };
 
-			var actual = options.Coalese();
+			var actual = options.Coalesce();
 			actual.AssertNone();
 		}
 
@@ -135,7 +133,7 @@ namespace Options.Fixtures
 		[Category("Fast")]
 		public void LiftReturnsNoneIfNone()
 		{
-			var actual = new Option<int>().Lift(i => new Option<int>(i));
+			var actual = new Option<int>().SelectMany(i => new Option<int>(i));
 			actual.AssertNone();
 		}
 
@@ -143,7 +141,9 @@ namespace Options.Fixtures
 		[Category("Fast")]
 		public void LiftReturnsSelectedOption()
 		{
-			var actual = new Option<int>(1).Lift(i => new Option<string>(i.ToString()));
+			var actual = from i in new Option<int>(1)
+			             from s in Option.Create(i.ToString())
+			             select s;
 			actual.AssertSomeAnd(Is.EqualTo(1.ToString()));
 		}
 
@@ -151,7 +151,7 @@ namespace Options.Fixtures
 		[Category("Fast")]
 		public void TransformReturnsNoneIfFuncReturnsNull()
 		{
-			var actual = new Option<int>(1).Transform(i => (string)null);
+			var actual = new Option<int>(1).Select(i => (string)null);
 			actual.AssertNone();
 		}
 
@@ -159,7 +159,7 @@ namespace Options.Fixtures
 		[Category("Fast")]
 		public void TransformToleratesNull()
 		{
-			var actual = new Option<int>().Transform<int, string>(null);
+			var actual = new Option<int>().Select<int, string>(null);
 			actual.AssertNone();
 		}
 
@@ -167,7 +167,7 @@ namespace Options.Fixtures
 		[Category("Fast")]
 		public void TransformTransformsNone()
 		{
-			var actual = new Option<int>().Transform(v => v == 1);
+			var actual = new Option<int>().Select(v => v == 1);
 			actual.AssertNone();
 			Assert.That(actual, Is.TypeOf<Option<bool>>());
 		}
@@ -176,7 +176,8 @@ namespace Options.Fixtures
 		[Category("Fast")]
 		public void TransformTransformsSome()
 		{
-			var actual = new Option<int>(1).Transform(v => v == 1);
+			var actual = from v in new Option<int>(1)
+			             select v == 1;
 			actual.AssertSomeAnd(Is.True);
 		}
 
@@ -189,19 +190,74 @@ namespace Options.Fixtures
 			Assert.That(FSharpOption<int>.get_IsSome(fSharpSome), "F# option should be some");
 			Assert.That(fSharpSome.Value, Is.EqualTo(random));
 
-			var ourNone = Option.None<int>();
+			var ourNone = Option.Create<int>();
 			var fSharpNone = ourNone.ToFSharp();
 			Assert.That(FSharpOption<int>.get_IsNone(fSharpNone), "F# option should be None");
 		}
 
-		[Test]
-		[Category("Fast")]
-		public void SpecialHandleForTupleOptions()
+		public void ActOneArgumentCallsIfSomeWithValueIfOptionHasValue()
 		{
-			var tupleOption = 1.AsOption().Intersect("Willis".AsOption());
-			tupleOption.AssertSomeAnd(Has.Property("Item1").EqualTo(1).And.Property("Item2").EqualTo("Willis"));
-			var actual = tupleOption.Handle((i, s) => s + i, () => "Huh?");
-			Assert.That(actual, Is.EqualTo("Willis1"));
+			var expected = 5;
+			var target = Option.Create(expected);
+			target.Act(actual => Assert.That(actual, Is.EqualTo(expected)));
 		}
+
+		public void ActOneArgumentDoesNotCallIfSomeWithValueIfOptionHasNoValue()
+		{
+			var target = Option.Create<int>();
+			target.Act(actual => Assert.Fail("ifSome called. value: " + actual));
+		}
+
+		public void ActTwoArgumentsCallsIfSomeWithValueIfOptionHasValue()
+		{
+			var expected = 5;
+			var target = Option.Create(expected);
+			target.Act(actual => Assert.That(actual, Is.EqualTo(expected)), () => {});
+		}
+
+		public void ActTwoArgumentsDoesNotCallIfNoneIfOptionHasValue()
+		{
+			var target = Option.Create(5);
+			target.Act(actual => { }, () => Assert.Fail("ifNone called."));
+		}
+
+		public void ActTwoArgumentsCallsIfNoneIfOptionHasNoValue()
+		{
+			var ifNoneCalled = false;
+			var target = Option.Create<int>();
+			target.Act(actual => { }, () => { ifNoneCalled = true; });
+			Assert.That(ifNoneCalled);
+		}
+
+		public void ActTwoArgumentsDoesNotCallIfSomeIfOptionHasNoValue()
+		{
+			var target = Option.Create<int>();
+			target.Act(actual => Assert.Fail("ifSome called. value: " + actual), () => {});
+		}
+
+		public void NoneIfNullOrWhitespaceReturnsNoneIfGivenNull()
+		{
+			string target = null;
+			target.NoneIfNullOrWhiteSpace().AssertNone();
+		}
+
+		public void NoneIfNullOrWhitespaceReturnsNoneIfGivenEmptyString()
+		{
+			var target = "";
+			target.NoneIfNullOrWhiteSpace().AssertNone();
+		}
+
+		public void NoneIfNullOrWhitespaceReturnsNoneIfGivenWhitespace()
+		{
+			var target = " \r\n\t";
+			target.NoneIfNullOrWhiteSpace().AssertNone();
+		}
+
+		public void NoneIfNullOrWhitespaceReturnsValueIfGivenContent()
+		{
+			var target = "a";
+			target.NoneIfNullOrWhiteSpace().AssertSomeAnd(Is.EqualTo("a"));
+		}
+
 	}
 }
