@@ -87,6 +87,18 @@ namespace Options
 		}
 
 		///<summary>
+		///	Retrieves the value contained in <paramref name = "option" /> or the default value of the type.
+		///</summary>
+		///<param name = "option">An <see cref = "Option{TOption}" /> of <typeparamref name = "TOption" /> internal type</param>
+		///<typeparam name = "TOption">The internal type of <paramref name = "option" /></typeparam>
+		///<returns>A <typeparamref name = "TOption" /> value. The internal value of <paramref name = "option" /> or the default value of <typeparamref name="TOption"/></returns>
+		public static TOption GetValueOrDefault<TOption>(this Option<TOption> option)
+			where TOption : struct
+		{
+			return option.GetValueOrDefault(default(TOption));
+		}
+
+		///<summary>
 		///	Retrieves the value contained in <paramref name = "option" /> or throws an exception.
 		///</summary>
 		///<param name = "option">An <see cref = "Option{TOption}" /> of <typeparamref name = "TOption" /> internal type</param>
