@@ -50,7 +50,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CommonAssemblyInfo.cs" />
+    <Compile Include="Either.cs" />
+    <Compile Include="EitherExtensions.cs" />
+    <Compile Include="Either[TLeft,TRight].cs" />
     <Compile Include="EnumerableExtensions.cs" />
+    <Compile Include="FluentEitherFactories.cs" />
+    <Compile Include="GlobalExtensions\EitherGlobalExtensions.cs" />
     <Compile Include="NoneException.cs" />
     <Compile Include="ObjectExtensions.cs" />
     <Compile Include="Option.cs" />
