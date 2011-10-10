@@ -42,8 +42,7 @@ namespace Options
 		///<typeparam name = "TResult">The type of the value of the resulting option.</typeparam>
 		///<returns>An <see cref = "Option{T}" /> whose value is the result of mapping the result value and its corresponding source value to a result value. If the source or intermediate option has no value, return an empty option of type <typeparamref name="TResult"/>.</returns>
 		///<exception cref = "ArgumentNullException"><paramref name="resultSelector"/> is null.</exception>
-		public static Option<TResult> SelectMany<TSource, TResult>(this Option<TSource> option,
-																												 Func<TSource, Option<TResult>> resultSelector)
+		public static Option<TResult> SelectMany<TSource, TResult>(this Option<TSource> option, Func<TSource, Option<TResult>> resultSelector)
 		{
 			return resultSelector == null
 							? Option.Create<TResult>()
@@ -72,6 +71,25 @@ namespace Options
 				throw new ArgumentNullException("resultSelector");
 			}
 			return option.Intersect(option.SelectMany(optionSelector)).Select(pair => resultSelector(pair.Item1, pair.Item2));
+		}
+
+		/// <summary>
+		/// Filters an option based on a predicate.
+		/// </summary>
+		/// <param name="option">The <see cref="Option{TOption}"/> to filter.</param>
+		/// <param name="predicate">A <see cref="Predicate{TResult}"/> used to filter the option</param>
+		/// <typeparam name="TSource">The type of the value contained by <paramref name="option"/></typeparam>
+		/// <returns><paramref name="option"/>, if <paramref name="option"/> has a value and <paramref name="predicate"/> returns true; an empty <see cref="Option{TOption}"/>, otherwise.</returns>
+		/// <exception cref="ArgumentNullException"><paramref name="predicate"/> is null.</exception>
+		public static Option<TSource> Where<TSource>(this Option<TSource> option, Func<TSource, bool> predicate)
+		{
+			if (predicate == null)
+			{
+				throw new ArgumentNullException("predicate");
+			}
+			return option.Handle(predicate, () => false)
+			       	? option
+			       	: Option.Create<TSource>();
 		}
 
 		///<summary>

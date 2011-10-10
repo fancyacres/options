@@ -195,6 +195,8 @@ namespace Options.Fixtures
 			Assert.That(FSharpOption<int>.get_IsNone(fSharpNone), "F# option should be None");
 		}
 
+		[Test]
+		[Category("Fast")]
 		public void ActOneArgumentCallsIfSomeWithValueIfOptionHasValue()
 		{
 			var expected = 5;
@@ -202,12 +204,16 @@ namespace Options.Fixtures
 			target.Act(actual => Assert.That(actual, Is.EqualTo(expected)));
 		}
 
+		[Test]
+		[Category("Fast")]
 		public void ActOneArgumentDoesNotCallIfSomeWithValueIfOptionHasNoValue()
 		{
 			var target = Option.Create<int>();
 			target.Act(actual => Assert.Fail("ifSome called. value: " + actual));
 		}
 
+		[Test]
+		[Category("Fast")]
 		public void ActTwoArgumentsCallsIfSomeWithValueIfOptionHasValue()
 		{
 			var expected = 5;
@@ -215,12 +221,16 @@ namespace Options.Fixtures
 			target.Act(actual => Assert.That(actual, Is.EqualTo(expected)), () => {});
 		}
 
+		[Test]
+		[Category("Fast")]
 		public void ActTwoArgumentsDoesNotCallIfNoneIfOptionHasValue()
 		{
 			var target = Option.Create(5);
 			target.Act(actual => { }, () => Assert.Fail("ifNone called."));
 		}
 
+		[Test]
+		[Category("Fast")]
 		public void ActTwoArgumentsCallsIfNoneIfOptionHasNoValue()
 		{
 			var ifNoneCalled = false;
@@ -229,35 +239,78 @@ namespace Options.Fixtures
 			Assert.That(ifNoneCalled);
 		}
 
+		[Test]
+		[Category("Fast")]
 		public void ActTwoArgumentsDoesNotCallIfSomeIfOptionHasNoValue()
 		{
 			var target = Option.Create<int>();
 			target.Act(actual => Assert.Fail("ifSome called. value: " + actual), () => {});
 		}
 
+		[Test]
+		[Category("Fast")]
 		public void NoneIfNullOrWhitespaceReturnsNoneIfGivenNull()
 		{
 			string target = null;
 			target.NoneIfNullOrWhiteSpace().AssertNone();
 		}
 
+		[Test]
+		[Category("Fast")]
 		public void NoneIfNullOrWhitespaceReturnsNoneIfGivenEmptyString()
 		{
 			var target = "";
 			target.NoneIfNullOrWhiteSpace().AssertNone();
 		}
 
+		[Test]
+		[Category("Fast")]
 		public void NoneIfNullOrWhitespaceReturnsNoneIfGivenWhitespace()
 		{
 			var target = " \r\n\t";
 			target.NoneIfNullOrWhiteSpace().AssertNone();
 		}
 
+		[Test]
+		[Category("Fast")]
 		public void NoneIfNullOrWhitespaceReturnsValueIfGivenContent()
 		{
 			var target = "a";
 			target.NoneIfNullOrWhiteSpace().AssertSomeAnd(Is.EqualTo("a"));
 		}
 
+		[Test]
+		[Category("Fast")]
+		public void WhereFiltersFalseReturnFromPredicate()
+		{
+			var nine = Option.Create(9).Where(i => i > 9);
+			nine.AssertNone();
+		}
+
+		[Test]
+		[Category("Fast")]
+		public void WherePassesThroughTrueReturnFromPredicate()
+		{
+			var nine = Option.Create(9).Where(i => i >= 9);
+			nine.AssertSomeAnd(Is.EqualTo(9));
+		}
+
+		[Test]
+		[Category("LINQ")]
+		public void LinqSyntax()
+		{
+			// Simple select
+			(from i in Option.Create(10) select i + 1).AssertSomeAnd(Is.EqualTo(11));
+			(from i in Option.Create<int>() select i + 1).AssertNone();
+
+			// Select many
+			(from first in Option.Create(1) from second in Option.Create(2) select second > first).AssertSomeAnd(Is.True);
+			(from first in Option.Create<int>() from second in Option.Create(2) select second > first).AssertNone();
+			(from first in Option.Create(1) from second in Option.Create<int>() select second > first).AssertNone();
+
+			// Where
+			(from i in Option.Create(10) where i > 9 select i).AssertSomeAnd(Is.EqualTo(10));
+			(from i in Option.Create(10) where i < 9 select i + 1).AssertNone();
+		}
 	}
 }
