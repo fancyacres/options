@@ -2,7 +2,7 @@
 using System.Runtime.InteropServices;
 
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("David Sidlinger")]
+[assembly: AssemblyCompany("David Sidlinger, Jeff Cutsinger")]
 [assembly: AssemblyProduct("Options")]
 [assembly: AssemblyCopyright("Copyright © David Sidlinger 2011")]
 [assembly: AssemblyCulture("")]

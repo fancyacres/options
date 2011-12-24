@@ -13,15 +13,25 @@ namespace Options.Fixtures
 		[Category("Fast")]
 		public void HatesNulls()
 		{
-			Assert.That(() => { ((IEnumerable<int>)null).OptionFirst(i => true); },
+			IEnumerable<int> nullEnumerable = null;
+
+			Assert.That(() => { nullEnumerable.OptionFirst(i => true); },
 			            Throws.TypeOf<ArgumentNullException>());
-			Assert.That(() => { ((IEnumerable<int>)null).OptionFirst(); },
+			Assert.That(() => { nullEnumerable.OptionFirst(); },
 						Throws.TypeOf<ArgumentNullException>());
 			Assert.That(() => { new [] { 1 }.OptionFirst(null); },
 						Throws.TypeOf<ArgumentNullException>());
-			Assert.That(() => { ((IEnumerable<int>)null).OptionSingle(i => true); },
+
+			Assert.That(() => { nullEnumerable.OptionLast(i => true); },
 						Throws.TypeOf<ArgumentNullException>());
-			Assert.That(() => { ((IEnumerable<int>)null).OptionSingle(); },
+			Assert.That(() => { nullEnumerable.OptionLast(); },
+						Throws.TypeOf<ArgumentNullException>());
+			Assert.That(() => { new[] { 1 }.OptionLast(null); },
+						Throws.TypeOf<ArgumentNullException>());
+
+			Assert.That(() => { nullEnumerable.OptionSingle(i => true); },
+						Throws.TypeOf<ArgumentNullException>());
+			Assert.That(() => { nullEnumerable.OptionSingle(); },
 						Throws.TypeOf<ArgumentNullException>());
 			Assert.That(() => { new[] { 1 }.OptionSingle(null); },
 						Throws.TypeOf<ArgumentNullException>());
@@ -67,6 +77,49 @@ namespace Options.Fixtures
 		{
 			var source = new int[] {};
 			var actual = source.OptionFirst();
+			actual.AssertNone();
+		}
+
+		[Test]
+		[Category("Fast")]
+		public void OptionLastReturnsOptionWithNoValueIfNoMatch()
+		{
+			var actual = Enumerable.Range(1, 10).OptionLast(i => i > 100);
+			actual.AssertNone();
+		}
+
+		[Test]
+		[Category("Fast")]
+		public void OptionLastReturnsLastItemWithValueThatMatches()
+		{
+			var actual = Enumerable.Range(1, 10).OptionLast(i => i > 5);
+			actual.AssertSomeAnd(Is.EqualTo(10));
+		}
+
+		[Test]
+		[Category("Fast")]
+		public void OptionLastWithNoPredicateReturnsLastNonNullValue()
+		{
+			var source = new[] { null, null, "Willis", null, "Drummond" };
+			var actual = source.OptionLast();
+			actual.AssertSomeAnd(Is.EqualTo("Drummond"));
+		}
+
+		[Test]
+		[Category("Fast")]
+		public void OptionLastWithNoPredicateReturnsOptionWithNoValueIfAllNull()
+		{
+			var source = new string[] { null, null, null };
+			var actual = source.OptionLast();
+			actual.AssertNone();
+		}
+
+		[Test]
+		[Category("Fast")]
+		public void OptionLastWithNoPredicateReturnsOptionWithNoValueIfEmpty()
+		{
+			var source = new int[] { };
+			var actual = source.OptionLast();
 			actual.AssertNone();
 		}
 
