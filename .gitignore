@@ -1,6 +1,7 @@
 **/_ReSharper.*/
 **/*.suo
 **/*.ReSharper.user
+**/*.DotSettings.user
 src/**/obj/
 src/**/bin/
 nuget-package/
