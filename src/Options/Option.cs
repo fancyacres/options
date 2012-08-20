@@ -1,5 +1,8 @@
 using System;
+
+#if !NETFX_CORE
 using Microsoft.FSharp.Core;
+#endif
 
 namespace Options
 {
@@ -59,6 +62,7 @@ namespace Options
 			       	: (() => new Option<TOption>(guarded()));
 		}
 
+#if !NETFX_CORE
 		///<summary>
 		/// Converts an <see cref="FSharpOption{T}"/> to an equivalent <see cref="Option{TOption}"/>.
 		///</summary>
@@ -73,6 +77,7 @@ namespace Options
 			}
 			return new Option<TOption>(fSharpOption.Value);
 		}
+#endif
 
 		/// <summary>
 		/// 	Creates an <see cref = "Option{TOption}" /> from a reference type, given a non-null value.

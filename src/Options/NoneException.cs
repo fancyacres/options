@@ -1,13 +1,18 @@
 ﻿using System;
 using System.Linq;
+
+#if !NETFX_CORE
 using System.Runtime.Serialization;
+#endif
 
 namespace Options
 {
 	///<summary>
 	///	An <see cref = "Exception" /> thrown when an <see cref = "Option{TOption}" /> value is accessed where none exists
 	///</summary>
-	[Serializable]
+#if !NETFX_CORE
+    [Serializable]
+#endif
 	public class NoneException : Exception
 	{
 		///<summary>
@@ -34,11 +39,13 @@ namespace Options
 
 		// ReSharper restore UnusedMember.Global
 
+#if !NETFX_CORE
 		/// <summary>
 		/// 	Initializes an instance of <see cref = "NoneException" />
 		/// </summary>
 		/// <param name = "info"></param>
 		/// <param name = "context"></param>
 		protected NoneException(SerializationInfo info, StreamingContext context) : base(info, context) {}
+#endif
 	}
 }

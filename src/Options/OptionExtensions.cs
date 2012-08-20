@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
+#if !NETFX_CORE
 using Microsoft.FSharp.Core;
+#endif
 
 namespace Options
 {
@@ -214,6 +216,7 @@ namespace Options
 			       	: options.FirstOrDefault(o => o.Select(v => true).GetValueOrDefault(false));
 		}
 
+#if !NETFX_CORE
 		///<summary>
 		/// Converts an <see cref="Option{TOption}"/> to an equivalent <see cref="FSharpOption{T}"/>
 		///</summary>
@@ -224,6 +227,7 @@ namespace Options
 		{
 			return option.Handle(FSharpOption<TOption>.Some, () => FSharpOption<TOption>.None);
 		}
+#endif
 
 		/// <summary>
 		/// Runs one of the given actions based on whether the given <see cref="Option{TOption}"/> has a value.
