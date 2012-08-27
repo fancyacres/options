@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="BuildPackage" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <RootDirectory>$(MSBuildProjectDirectory)</RootDirectory>
+    <Configuration>Release</Configuration>
+  </PropertyGroup>
+
+  <Target Name="BuildPackage">
+    <PropertyGroup>
+      <__NuGetTemp__>$(RootDirectory)\nuget-package\tmp</__NuGetTemp__>
+    </PropertyGroup>
+    <RemoveDir Directories="$(__NuGetTemp__)" Condition="Exists('$(__NuGetTemp__)')" />
+
+    <!-- Fuck yeah brute force! -->
+    <MakeDir Directories="$(__NuGetTemp__)\lib"/>
+    <MakeDir Directories="$(__NuGetTemp__)\lib\net40-client"/>
+    <MakeDir Directories="$(__NuGetTemp__)\lib\net45"/>
+    <MakeDir Directories="$(__NuGetTemp__)\lib\winrt45"/>
+
+    <MSBuild
+      Projects="$(RootDirectory)\src\Options\Options.csproj"
+      Targets="Clean;Build"
+      Properties="TargetFrameworkVersion=v4.0;TargetFrameworkProfile=Client;Configuration=$(Configuration);OutputPath=$(__NuGetTemp__)\lib\net40-client;BuildPackage=False">
+      <Output ItemName="__Built__" TaskParameter="TargetOutputs"/>
+    </MSBuild>
+
+    <MSBuild
+      Projects="$(RootDirectory)\src\Options\Options.csproj"
+      Targets="Clean;Build"
+      Properties="TargetFrameworkVersion=v4.5;TargetFrameworkProfile=;Configuration=$(Configuration);OutputPath=$(__NuGetTemp__)\lib\net45;BuildPackage=False"/>
+
+    <MSBuild
+      Projects="$(RootDirectory)\src\Options.WinRT\Options.WinRT.csproj"
+      Targets="Build"
+      Properties="Configuration=$(Configuration);OutputPath=$(__NuGetTemp__)\lib\winrt45;BuildPackage=False"/>
+
+    <Copy SourceFiles="$(RootDirectory)\Options.nuspec" DestinationFolder="$(__NuGetTemp__)" />
+
+    <GetAssemblyIdentity AssemblyFiles="@(__Built__)">
+      <Output ItemName="__BuiltIdentity__" TaskParameter="Assemblies"/>
+    </GetAssemblyIdentity>
+
+    <PropertyGroup>
+      <__NuGetExe__>"$(RootDirectory)\src\.nuget\nuget.exe"</__NuGetExe__>
+      <__NuSpecFile__>"$(__NuGetTemp__)\Options.nuspec"</__NuSpecFile__>
+      <__PackageOutput__>"$(RootDirectory)\nuget-package"</__PackageOutput__>
+    </PropertyGroup>
+    
+    <Exec Command="$(__NuGetExe__) pack $(__NuSpecFile__) -o $(__PackageOutput__) -symbols -properties version=%(__BuiltIdentity__.Version)" />
+  </Target>
+</Project>
