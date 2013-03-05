@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-#if !NETFX_CORE
+#if !NETFX_CORE && !WINDOWS_PHONE
 using Microsoft.FSharp.Core;
 #endif
 
@@ -216,7 +216,7 @@ namespace Options
 			       	: options.FirstOrDefault(o => o.Select(v => true).GetValueOrDefault(false));
 		}
 
-#if !NETFX_CORE
+#if !NETFX_CORE && !WINDOWS_PHONE
 		///<summary>
 		/// Converts an <see cref="Option{TOption}"/> to an equivalent <see cref="FSharpOption{T}"/>
 		///</summary>
@@ -229,7 +229,7 @@ namespace Options
 		}
 #endif
 
-		/// <summary>
+        /// <summary>
 		/// Runs one of the given actions based on whether the given <see cref="Option{TOption}"/> has a value.
 		/// </summary>
 		///<typeparam name = "TOption">The internal type of <paramref name = "option" /></typeparam>

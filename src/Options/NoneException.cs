@@ -9,11 +9,11 @@ namespace Options
 {
 	///<summary>
 	///	An <see cref = "Exception" /> thrown when an <see cref = "Option{TOption}" /> value is accessed where none exists
-	///</summary>
-#if !NETFX_CORE
+    ///</summary>
+#if !NETFX_CORE && !WINDOWS_PHONE
     [Serializable]
 #endif
-	public class NoneException : Exception
+    public class NoneException : Exception
 	{
 		///<summary>
 		///	Initializes an instance of <see cref = "NoneException" /> with a default message
@@ -37,9 +37,9 @@ namespace Options
 		// ReSharper disable UnusedMember.Global
 		public NoneException(string message, Exception innerException) : base(message, innerException) {}
 
-		// ReSharper restore UnusedMember.Global
+        // ReSharper restore UnusedMember.Global
 
-#if !NETFX_CORE
+#if !NETFX_CORE && !WINDOWS_PHONE
 		/// <summary>
 		/// 	Initializes an instance of <see cref = "NoneException" />
 		/// </summary>
@@ -47,5 +47,5 @@ namespace Options
 		/// <param name = "context"></param>
 		protected NoneException(SerializationInfo info, StreamingContext context) : base(info, context) {}
 #endif
-	}
+    }
 }

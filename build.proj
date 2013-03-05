@@ -15,7 +15,8 @@
     <MakeDir Directories="$(__NuGetTemp__)\lib"/>
     <MakeDir Directories="$(__NuGetTemp__)\lib\net40-client"/>
     <MakeDir Directories="$(__NuGetTemp__)\lib\net45"/>
-    <MakeDir Directories="$(__NuGetTemp__)\lib\winrt45"/>
+    <MakeDir Directories="$(__NuGetTemp__)\lib\NetCore45"/>
+    <MakeDir Directories="$(__NuGetTemp__)\lib\windowsphone8"/>
 
     <MSBuild
       Projects="$(RootDirectory)\src\Options\Options.csproj"
@@ -32,7 +33,12 @@
     <MSBuild
       Projects="$(RootDirectory)\src\Options.WinRT\Options.WinRT.csproj"
       Targets="Build"
-      Properties="Configuration=$(Configuration);OutputPath=$(__NuGetTemp__)\lib\winrt45;BuildPackage=False"/>
+      Properties="Configuration=$(Configuration);OutputPath=$(__NuGetTemp__)\lib\NetCore45;BuildPackage=False"/>
+
+    <MSBuild
+      Projects="$(RootDirectory)\src\Options.WindowsPhone8\Options.WindowsPhone8.csproj"
+      Targets="Build"
+      Properties="Configuration=$(Configuration);OutputPath=$(__NuGetTemp__)\lib\windowsphone8;BuildPackage=False"/>
 
     <Copy SourceFiles="$(RootDirectory)\Options.nuspec" DestinationFolder="$(__NuGetTemp__)" />
 
