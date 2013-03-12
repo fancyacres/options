@@ -107,6 +107,9 @@
     <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\Options\Async\AsyncOption.cs">
+      <Link>Async\AsyncOption.cs</Link>
+    </Compile>
     <Compile Include="..\Options\CommonAssemblyInfo.cs">
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>

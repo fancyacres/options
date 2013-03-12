@@ -87,6 +87,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="..\Options\Async\AsyncOption.cs">
+      <Link>Async\AsyncOption.cs</Link>
+    </Compile>
     <Compile Include="..\Options\CommonAssemblyInfo.cs">
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>

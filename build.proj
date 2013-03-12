@@ -21,7 +21,7 @@
     <MSBuild
       Projects="$(RootDirectory)\src\Options\Options.csproj"
       Targets="Clean;Build"
-      Properties="TargetFrameworkVersion=v4.0;TargetFrameworkProfile=Client;Configuration=$(Configuration);OutputPath=$(__NuGetTemp__)\lib\net40-client;BuildPackage=False">
+      Properties="TargetFrameworkVersion=v4.0;TargetFrameworkProfile=Client;Configuration=$(Configuration);OutputPath=$(__NuGetTemp__)\lib\net40-client;BuildPackage=False;DefineConstants=TRACE;NO_ASYNC">
       <Output ItemName="__Built__" TaskParameter="TargetOutputs"/>
     </MSBuild>
 
