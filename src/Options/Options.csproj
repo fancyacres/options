@@ -69,6 +69,7 @@
     <Compile Include="ObjectExtensions.cs" />
     <Compile Include="Option.cs" />
     <Compile Include="OptionExtensions.cs" />
+    <Compile Include="OptionNone.cs" />
     <Compile Include="Option[TOption].cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

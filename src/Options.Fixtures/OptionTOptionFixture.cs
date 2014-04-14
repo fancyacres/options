@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.Linq;
 
 using NUnit.Framework;
@@ -95,5 +96,25 @@ namespace Options.Fixtures
 			var expected = new Option<int>(random).GetHashCode();
 			Assert.That(actual, Is.EqualTo(expected));
 		}
+
+	    [Test]
+	    [Category("Fast")]
+	    public void ImplicitSyntax()
+	    {
+	        Func<decimal, decimal, Option<Decimal>> divide = (divisor, dividend) =>
+	        {
+	            if (dividend != 0)
+	            {
+	                return divisor / dividend;
+	            }
+	            else
+	            {
+	                return Option.None();
+	            }
+	        };
+
+	        divide(2, 1).AssertSomeAnd(Is.EqualTo(2));
+            divide(2, 0).AssertNone();
+	    }
 	}
 }

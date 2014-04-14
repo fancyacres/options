@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace Options
 {
-	/// <summary>
+    /// <summary>
 	/// 	A handy alternative to null.
 	/// </summary>
 	/// <typeparam name = "TOption">The type of the value contained by an <see cref = "Option{TOption}" /></typeparam>
@@ -121,5 +121,31 @@ namespace Options
 		}
 
 		#endregion
+
+        /// <summary>
+        ///     Operator to provide implicit lifting into <see cref = "Option{TOption}" /> values
+        /// </summary>
+        /// <param name="value">The value that will be returned in <see cref = "Option{TOption}" /> form</param>
+        /// <returns>
+        ///     An <see cref = "Option{TOption}" /> containing <paramref name="value"/>.
+        ///     If <paramref name="value"/> is <c>null</c>, the result will be none.
+        /// </returns>
+	    public static implicit operator Option<TOption>(TOption value)
+	    {
+	        return new Option<TOption>(value);
+	    }
+
+
+        /// <summary>
+        ///     Operator to support <see cref="Option"/>.None
+        /// </summary>
+        /// <param name="none">A placeholder value, typically returned by <see cref="Option"/>.None</param>
+        /// <returns>
+        ///     A none valued <see cref = "Option{TOption}" />
+        /// </returns>
+        public static implicit operator Option<TOption>(OptionNone none)
+        {
+            return new Option<TOption>();
+        }
 	}
 }
