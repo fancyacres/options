@@ -59,6 +59,7 @@
   <ItemGroup>
     <Compile Include="Async\AsyncOption.cs" />
     <Compile Include="CommonAssemblyInfo.cs" />
+    <Compile Include="DictionaryExtensions.cs" />
     <Compile Include="Either.cs" />
     <Compile Include="EitherExtensions.cs" />
     <Compile Include="Either[TLeft,TRight].cs" />
