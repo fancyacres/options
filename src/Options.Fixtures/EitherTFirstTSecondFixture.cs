@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
 
 namespace Options.Fixtures
 {
@@ -139,5 +140,31 @@ namespace Options.Fixtures
 			}
 			Assert.That(target0.GetHashCode(), Is.EqualTo(target1.GetHashCode()));
 		}
-	}
+
+	    [Test]
+	    public void ImplicitSyntax()
+	    {
+	        Func<bool, Either<int, string>> function = returnInt =>
+	        {
+	            if (returnInt)
+	            {
+	                return 5;
+	            }
+	            else
+	            {
+	                return "Five";
+	            }
+	        };
+
+            Assert.That(function(true), Is.EqualTo(new Either<int, string>(5)));
+            Assert.That(function(false), Is.EqualTo(new Either<int, string>("Five")));
+        }
+
+        [Test]
+        public void EqualityWorksForContainedValues()
+        {
+            Assert.That(new Either<int, string>(5).Equals((object)5));
+            Assert.That(new Either<int, string>("Five").Equals((object)"Five"));
+        }
+    }
 }
