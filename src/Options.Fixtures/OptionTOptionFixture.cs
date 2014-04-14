@@ -116,5 +116,91 @@ namespace Options.Fixtures
 	        divide(2, 1).AssertSomeAnd(Is.EqualTo(2));
             divide(2, 0).AssertNone();
 	    }
-	}
+
+	    [Test]
+        [Category("Fast")]
+        public void ContainedObjectEquality([Random(int.MinValue, int.MaxValue, 1)] int random)
+        {
+	        var option = new Option<int>(random);
+	        var value = random;
+
+	        Assert.That(option.Equals(value));
+	        Assert.That(option == value);
+	        Assert.That(value == option);
+            Assert.That(option != value, Is.False);
+            Assert.That(value != option, Is.False);
+        }
+
+	    [Test]
+	    [Category("Fast")]
+	    public void ContainedObjectBoxedEquality([Random(int.MinValue, int.MaxValue, 1)] int random)
+	    {
+	        var option = new Option<int>(random);
+	        var box = (object) random;
+	        Assert.That(option.Equals(box));
+	    }
+
+	    [Test]
+        [Category("Fast")]
+        public void ContainedObjectInequality(
+            [Random(int.MinValue, int.MaxValue, 1)] int random0,
+            [Random(int.MinValue, int.MaxValue, 1)] int random1)
+        {
+            if (random0 == random1)
+            {
+                Assert.Inconclusive();
+            }
+
+            var option = new Option<int>(random0);
+            var value = random1;
+
+            Assert.That(option.Equals(value), Is.False);
+            Assert.That(option == value, Is.False);
+            Assert.That(value == option, Is.False);
+            Assert.That(option != value);
+            Assert.That(value != option);
+        }
+
+        [Test]
+        [Category("Fast")]
+        public void NullReferenceNoneInequality()
+        {
+            var option = new Option<string>();
+            string value = null;
+
+            Assert.That(option.Equals(value), Is.False);
+            Assert.That(option == value, Is.False);
+            Assert.That(value == option, Is.False);
+            Assert.That(option != value);
+            Assert.That(value != option);
+        }
+
+        [Test]
+        [Category("Fast")]
+        public void NullReferenceInequality([Random(int.MinValue, int.MaxValue, 1)] int random)
+        {
+            var option = new Option<string>(random.ToString());
+            string value = null;
+
+            Assert.That(option.Equals(value), Is.False);
+            Assert.That(option == value, Is.False);
+            Assert.That(value == option, Is.False);
+            Assert.That(option != value);
+            Assert.That(value != option);
+        }
+
+        [Test]
+        [Category("Fast")]
+        public void NoneInequality([Random(int.MinValue, int.MaxValue, 1)] int random)
+        {
+            var option = new Option<int>();
+            var value = random;
+
+            Assert.That(option.Equals(value), Is.False);
+            Assert.That(option == value, Is.False);
+            Assert.That(value == option, Is.False);
+            Assert.That(option != value);
+            Assert.That(value != option);
+        }
+    }
 }
