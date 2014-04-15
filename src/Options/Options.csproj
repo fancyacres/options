@@ -67,7 +67,7 @@
     <Compile Include="FluentEitherFactories.cs" />
     <Compile Include="GlobalExtensions\EitherGlobalExtensions.cs" />
     <Compile Include="NoneException.cs" />
-    <Compile Include="ObjectExtensions.cs" />
+    <Compile Include="GlobalExtensions\ObjectExtensions.cs" />
     <Compile Include="Option.cs" />
     <Compile Include="OptionExtensions.cs" />
     <Compile Include="OptionNone.cs" />
