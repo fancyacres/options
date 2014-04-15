@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Options
 {
-	///<summary>
+    ///<summary>
 	///	Provides extensions to <see cref = "IEnumerable{T}" />
 	///</summary>
 	public static class EnumerableExtensions

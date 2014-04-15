@@ -1,14 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Options
 {
-	/// <summary>
+    /// <summary>
 	/// 	A handy alternative to null.
 	/// </summary>
 	/// <typeparam name = "TOption">The type of the value contained by an <see cref = "Option{TOption}" /></typeparam>
-	public struct Option<TOption> : IEquatable<Option<TOption>>
-	{
+	public struct Option<TOption> : IEquatable<Option<TOption>>, IEquatable<TOption>
+    {
 		private readonly bool _isSome;
 		private readonly TOption _value;
 
@@ -47,7 +48,33 @@ namespace Options
 			return _isSome ? ifSome(_value) : ifNone();
 		}
 
-		/// <summary>
+        /// <summary>
+        /// Indicates whether the current object is equal to another object of the contained type.
+        /// </summary>
+        /// <returns>
+        /// If there is no value in the option and <paramref name="other"/> is null, true;
+        /// if there is no value in the option and <paramref name="other"/> is not null, false;
+        /// if the contained object is equal to the <paramref name="other"/> parameter according to Object.Equals, true;
+        /// otherwise, false.
+        /// </returns>
+        /// <param name="other">An object to compare with this object.</param>
+        public bool Equals(TOption other)
+        {
+            if (ReferenceEquals(null, other))
+            {
+                return false;
+            }
+            else if (!_isSome)
+            {
+                return false;
+            }
+            else
+            {
+                return _value.Equals(other);
+            }
+        }
+
+        /// <summary>
 		/// 	Indicates whether this instance and a specified object are equal.
 		/// </summary>
 		/// <returns>
@@ -61,6 +88,10 @@ namespace Options
 			{
 				return false;
 			}
+            if (obj.GetType() == typeof (TOption))
+            {
+                return Equals((TOption) obj);
+            }
 			if (obj.GetType() != typeof(Option<TOption>))
 			{
 				return false;
@@ -105,6 +136,51 @@ namespace Options
 			return !left.Equals(right);
 		}
 
+        /// <summary>
+        /// 	Operator to test <see cref = "Option{TOption}" /> equality
+        /// </summary>
+        /// <param name = "left">The <see cref = "Option{TOption}" /> on the left side of the operator</param>
+        /// <param name = "right">The <see cref = "Option{TOption}" /> on the right side of the operator</param>
+        /// <returns>True, if the instances are equal; false, if not.</returns>
+        public static bool operator ==(Option<TOption> left, TOption right)
+        {
+            return left.Equals(right);
+        }
+
+        /// <summary>
+        /// 	Operator to test <see cref = "Option{TOption}" /> equality
+        /// </summary>
+        /// <param name = "left">The <see cref = "Option{TOption}" /> on the left side of the operator</param>
+        /// <param name = "right">The <see cref = "Option{TOption}" /> on the right side of the operator</param>
+        /// <returns>False, if the instances are equal; true, if not.</returns>
+        public static bool operator !=(Option<TOption> left, TOption right)
+        {
+            return !left.Equals(right);
+        }
+
+        /// <summary>
+        /// 	Operator to test <see cref = "Option{TOption}" /> equality
+        /// </summary>
+        /// <param name = "left">The <see cref = "Option{TOption}" /> on the left side of the operator</param>
+        /// <param name = "right">The <see cref = "Option{TOption}" /> on the right side of the operator</param>
+        /// <returns>True, if the instances are equal; false, if not.</returns>
+        public static bool operator ==(TOption left, Option<TOption> right)
+        {
+            return right.Equals(left);
+        }
+
+        /// <summary>
+        /// 	Operator to test <see cref = "Option{TOption}" /> equality
+        /// </summary>
+        /// <param name = "left">The <see cref = "Option{TOption}" /> on the left side of the operator</param>
+        /// <param name = "right">The <see cref = "Option{TOption}" /> on the right side of the operator</param>
+        /// <returns>False, if the instances are equal; true, if not.</returns>
+        public static bool operator !=(TOption left, Option<TOption> right)
+        {
+            return !right.Equals(left);
+        }
+
+
 		#region IEquatable<Option<TOption>> Members
 
 		/// <summary>
@@ -121,5 +197,31 @@ namespace Options
 		}
 
 		#endregion
+
+        /// <summary>
+        ///     Operator to provide implicit lifting into <see cref = "Option{TOption}" /> values
+        /// </summary>
+        /// <param name="value">The value that will be returned in <see cref = "Option{TOption}" /> form</param>
+        /// <returns>
+        ///     An <see cref = "Option{TOption}" /> containing <paramref name="value"/>.
+        ///     If <paramref name="value"/> is <c>null</c>, the result will be none.
+        /// </returns>
+	    public static implicit operator Option<TOption>(TOption value)
+	    {
+	        return new Option<TOption>(value);
+	    }
+
+
+        /// <summary>
+        ///     Operator to support <see cref="Option"/>.None
+        /// </summary>
+        /// <param name="none">A placeholder value, typically returned by <see cref="Option"/>.None</param>
+        /// <returns>
+        ///     A none valued <see cref = "Option{TOption}" />
+        /// </returns>
+        public static implicit operator Option<TOption>(OptionNone none)
+        {
+            return new Option<TOption>();
+        }
 	}
 }

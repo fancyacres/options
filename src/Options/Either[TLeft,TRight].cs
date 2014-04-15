@@ -95,7 +95,9 @@ namespace Options
 		{
 			if (ReferenceEquals(null, obj)) return false;
 			if (ReferenceEquals(this, obj)) return true;
-			if (obj.GetType() != typeof(Either<TFirst, TSecond>)) return false;
+            if (obj.GetType() == typeof(TFirst)) return Equals((TFirst)obj);
+            if (obj.GetType() == typeof(TSecond)) return Equals((TSecond)obj);
+            if (obj.GetType() != typeof(Either<TFirst, TSecond>)) return false;
 			return Equals((Either<TFirst, TSecond>) obj);
 		}
 
@@ -144,5 +146,29 @@ namespace Options
 		{
 			return !Equals(left, right);
 		}
+
+        /// <summary>
+        ///     Operator to provide implicit lifting into <see cref = "Either{TFirst, TSecond}" /> values
+        /// </summary>
+        /// <param name="first">The value that will be returned in <see cref = "Either{TFirst, TSecond}" /> form</param>
+        /// <returns>
+        ///     An <see cref = "Either{TFirst, TSecond}" /> containing <paramref name="first"/>.
+        /// </returns>
+        public static implicit operator Either<TFirst, TSecond>(TFirst first)
+	    {
+	        return new Either<TFirst, TSecond>(first);
+	    }
+
+	    /// <summary>
+        ///     Operator to provide implicit lifting into <see cref = "Either{TFirst, TSecond}" /> values
+        /// </summary>
+        /// <param name="second">The value that will be returned in <see cref = "Either{TFirst, TSecond}" /> form</param>
+        /// <returns>
+        ///     An <see cref = "Either{TFirst, TSecond}" /> containing <paramref name="second"/>.
+        /// </returns>
+	    public static implicit operator Either<TFirst, TSecond>(TSecond second)
+	    {
+	        return new Either<TFirst, TSecond>(second);
+	    }
 	}
 }

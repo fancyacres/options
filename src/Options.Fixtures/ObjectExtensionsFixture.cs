@@ -1,4 +1,5 @@
 using NUnit.Framework;
+using Options.GlobalExtensions;
 
 namespace Options.Fixtures
 {

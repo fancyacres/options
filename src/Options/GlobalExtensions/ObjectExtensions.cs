@@ -1,4 +1,4 @@
-namespace Options
+namespace Options.GlobalExtensions
 {
 	///<summary>
 	/// Extensions to <see cref="object"/> to ease work with <see cref="Option{TOption}"/>

@@ -59,6 +59,7 @@
   <ItemGroup>
     <Compile Include="Async\AsyncOption.cs" />
     <Compile Include="CommonAssemblyInfo.cs" />
+    <Compile Include="DictionaryExtensions.cs" />
     <Compile Include="Either.cs" />
     <Compile Include="EitherExtensions.cs" />
     <Compile Include="Either[TLeft,TRight].cs" />
@@ -66,9 +67,10 @@
     <Compile Include="FluentEitherFactories.cs" />
     <Compile Include="GlobalExtensions\EitherGlobalExtensions.cs" />
     <Compile Include="NoneException.cs" />
-    <Compile Include="ObjectExtensions.cs" />
+    <Compile Include="GlobalExtensions\ObjectExtensions.cs" />
     <Compile Include="Option.cs" />
     <Compile Include="OptionExtensions.cs" />
+    <Compile Include="OptionNone.cs" />
     <Compile Include="Option[TOption].cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
