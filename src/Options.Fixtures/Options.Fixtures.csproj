@@ -61,6 +61,7 @@
     <Compile Include="..\Options\CommonAssemblyInfo.cs">
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="DictionaryExtensions.cs" />
     <Compile Include="EitherExtensionsFixture.cs" />
     <Compile Include="EitherTFirstTSecondFixture.cs" />
     <Compile Include="EnumerableExtensionsFixture.cs" />

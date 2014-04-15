@@ -93,6 +93,9 @@
     <Compile Include="..\Options\CommonAssemblyInfo.cs">
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="..\Options\DictionaryExtensions.cs">
+      <Link>DictionaryExtensions.cs</Link>
+    </Compile>
     <Compile Include="..\Options\Either.cs">
       <Link>Either.cs</Link>
     </Compile>
@@ -111,17 +114,20 @@
     <Compile Include="..\Options\GlobalExtensions\EitherGlobalExtensions.cs">
       <Link>GlobalExtensions\EitherGlobalExtensions.cs</Link>
     </Compile>
+    <Compile Include="..\Options\GlobalExtensions\ObjectExtensions.cs">
+      <Link>GlobalExtensions\ObjectExtensions.cs</Link>
+    </Compile>
     <Compile Include="..\Options\NoneException.cs">
       <Link>NoneException.cs</Link>
-    </Compile>
-    <Compile Include="..\Options\ObjectExtensions.cs">
-      <Link>ObjectExtensions.cs</Link>
     </Compile>
     <Compile Include="..\Options\Option.cs">
       <Link>Option.cs</Link>
     </Compile>
     <Compile Include="..\Options\OptionExtensions.cs">
       <Link>OptionExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Options\OptionNone.cs">
+      <Link>OptionNone.cs</Link>
     </Compile>
     <Compile Include="..\Options\Option[TOption].cs">
       <Link>Option[TOption].cs</Link>
