@@ -1,5 +1,6 @@
 ﻿using NUnit.Framework;
 using Options.Core;
+using Options.GlobalExtensions;
 
 namespace Options.Linq
 {
@@ -95,6 +96,15 @@ namespace Options.Linq
             var published = Option.Constant(Unit.Default).Publish();
             Assert.That(published.HasEvaluated, Is.False);
             published.Evaluate();
+            Assert.That(published.HasEvaluated, Is.True);
+        }
+
+        [Test]
+        public void AsOption_Returned_Option_Evaluates_When_Handle_Called()
+        {
+            var published = Option.Constant(Unit.Default).Publish();
+            var option = published.AsOption();
+            option.Handle(unit => unit, () => Unit.Default);
             Assert.That(published.HasEvaluated, Is.True);
         }
     }
