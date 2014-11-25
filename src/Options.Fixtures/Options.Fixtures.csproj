@@ -8,7 +8,7 @@
     <ProjectGuid>{C154E98E-41F9-47E9-8AB7-2518A9BB6B92}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Options.Fixtures</RootNamespace>
+    <RootNamespace>Options</RootNamespace>
     <AssemblyName>Options.Fixtures</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -40,14 +40,9 @@
     <Reference Include="FSharp.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
     </Reference>
-    <Reference Include="nunit.framework">
-      <HintPath>..\packages\NUnit.2.5.7.10213\lib\nunit.framework.dll</HintPath>
-    </Reference>
-    <Reference Include="nunit.mocks">
-      <HintPath>..\packages\NUnit.2.5.7.10213\lib\nunit.mocks.dll</HintPath>
-    </Reference>
-    <Reference Include="pnunit.framework">
-      <HintPath>..\packages\NUnit.2.5.7.10213\lib\pnunit.framework.dll</HintPath>
+    <Reference Include="nunit.framework, Version=2.6.3.13283, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\NUnit.2.6.3\lib\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -65,6 +60,15 @@
     <Compile Include="EitherExtensionsFixture.cs" />
     <Compile Include="EitherTFirstTSecondFixture.cs" />
     <Compile Include="EnumerableExtensionsFixture.cs" />
+    <Compile Include="CallCounter.cs" />
+    <Compile Include="EvaluationCounter.cs" />
+    <Compile Include="Extensions\DictionariesFixture.cs" />
+    <Compile Include="Extensions\StringsFixture.cs" />
+    <Compile Include="Linq\ComparisonFixture.cs" />
+    <Compile Include="Linq\DeferredFixture.cs" />
+    <Compile Include="Linq\OptionLinqFixture.cs" />
+    <Compile Include="Linq\PublicationFixture.cs" />
+    <Compile Include="Linq\UtilityFixture.cs" />
     <Compile Include="ObjectExtensionsFixture.cs" />
     <Compile Include="OptionExtensionsFixture.cs" />
     <Compile Include="OptionFixture.cs" />

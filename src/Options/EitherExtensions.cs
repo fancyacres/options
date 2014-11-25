@@ -2,7 +2,8 @@ using System;
 
 namespace Options
 {
-	/// <summary>
+#pragma warning disable 618
+    /// <summary>
 	/// A set of utility functions for the <see cref="Either{TFirst,TSecond}"/> type.
 	/// </summary>
 	public static class EitherExtensions
@@ -464,4 +465,5 @@ namespace Options
 				second => new Either<TFirstResult, TSecond>(second));
 		}
 	}
+#pragma warning restore 618
 }

@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 namespace Options.Async
 {
 #if !NO_ASYNC
+#pragma warning disable 618
     /// <summary>
     /// Extension and "helper" methods to work with <see cref="Option{TOption}"/> asynchronously
     /// </summary>
@@ -692,5 +693,6 @@ namespace Options.Async
                                               () => Task.FromResult(new Option<Tuple<T1, T2>>()));
         }
     }
+#pragma warning restore 618
 #endif
 }

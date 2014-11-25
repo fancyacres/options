@@ -8,7 +8,8 @@ using Microsoft.FSharp.Core;
 
 namespace Options
 {
-	///<summary>
+#pragma warning disable 618
+    ///<summary>
 	///	Extension methods designed to ease the pain of working with <see cref = "Option{TOption}" />.
 	///</summary>
 	public static class OptionExtensions
@@ -306,4 +307,5 @@ namespace Options
 			return option.Handle(tuple => ifSome(tuple.Item1, tuple.Item2), ifNone);
 		}
 	}
+#pragma warning restore 618
 }

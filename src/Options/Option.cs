@@ -9,6 +9,7 @@ namespace Options
 	/// <summary>
 	/// 	Methods to assist in the creation of <see cref = "Option{TOption}" />s
 	/// </summary>
+	[Obsolete("Options has been rewritted. Use Option in Options.Linq instead.")]
 	public static class Option
 	{
 		/// <summary>

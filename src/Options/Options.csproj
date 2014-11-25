@@ -59,13 +59,31 @@
   <ItemGroup>
     <Compile Include="Async\AsyncOption.cs" />
     <Compile Include="CommonAssemblyInfo.cs" />
+    <Compile Include="Core\INonEmptyOption.cs" />
+    <Compile Include="Core\INonWhiteSpaceOption.cs" />
+    <Compile Include="Core\OptionImpl.cs" />
+    <Compile Include="Core\ValueOption.cs" />
+    <Compile Include="Core\Funcs.cs" />
+    <Compile Include="Core\IComparableOption.cs" />
+    <Compile Include="Core\IDeferredOption.cs" />
+    <Compile Include="Core\IEquatableOption.cs" />
+    <Compile Include="Core\IOption.cs" />
+    <Compile Include="Core\IPublishedOption.cs" />
+    <Compile Include="Core\Unit.cs" />
     <Compile Include="DictionaryExtensions.cs" />
     <Compile Include="Either.cs" />
     <Compile Include="EitherExtensions.cs" />
     <Compile Include="Either[TLeft,TRight].cs" />
     <Compile Include="EnumerableExtensions.cs" />
+    <Compile Include="Extensions\Dictionaries.cs" />
+    <Compile Include="Extensions\Strings.cs" />
     <Compile Include="FluentEitherFactories.cs" />
     <Compile Include="GlobalExtensions\EitherGlobalExtensions.cs" />
+    <Compile Include="Linq\Option.cs" />
+    <Compile Include="Linq\Option.Comparison.cs" />
+    <Compile Include="Linq\Option.Defer.cs" />
+    <Compile Include="Linq\Option.Linq.cs" />
+    <Compile Include="Linq\Option.Published.cs" />
     <Compile Include="NoneException.cs" />
     <Compile Include="GlobalExtensions\ObjectExtensions.cs" />
     <Compile Include="Option.cs" />
@@ -74,6 +92,7 @@
     <Compile Include="Option[TOption].cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
