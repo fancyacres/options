@@ -42,7 +42,7 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
-    <KeyContainerName>Options</KeyContainerName>
+    <!-- KeyContainerName>Options</KeyContainerName -->
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="FSharp.Core">
