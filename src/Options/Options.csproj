@@ -41,9 +41,6 @@
     <DocumentationFile>bin\Release\Options.XML</DocumentationFile>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
-  <PropertyGroup>
-    <!-- KeyContainerName>Options</KeyContainerName -->
-  </PropertyGroup>
   <ItemGroup>
     <Reference Include="FSharp.Core">
       <SpecificVersion>False</SpecificVersion>
